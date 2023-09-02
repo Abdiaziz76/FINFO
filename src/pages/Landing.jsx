@@ -52,9 +52,11 @@ const LandingPage = () => {
           <p className="text-gray-600 dark:text-slate-200 mb-6">
             Get personalized financial advice and make informed decisions.
           </p>
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
-            Get Started
-          </button>
+          <Link to='/signup'>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+              Get Started
+            </button>
+          </Link>
         </div>
       </section>
 
@@ -99,7 +101,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-blue-500 dark:bg-black py-4">
         <div className="container mx-auto text-center text-white">
-          &copy; 2023 Financial Advice Platform
+          &copy; 2023 FINFO
         </div>
       </footer>
     </div>
