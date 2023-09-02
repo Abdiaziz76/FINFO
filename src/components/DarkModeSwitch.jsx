@@ -16,10 +16,10 @@ export default function DarkModeSwitcher() {
 	return (
 		<>
 			<DarkModeSwitch
-				
+			
 				checked={darkSide}
 				onChange={toggleDarkMode}
-				size={30}
+				size={20}
 			/>
 		</>
 	);
