@@ -76,7 +76,13 @@ const HomePage = () => {
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
             </div>
         </div>
-        <MobileMenu show={showMobileMenu} setShow={setShowMobileMenu} menuItems={menuItems} setActiveMenu={setActiveMenu} activeMenu={activeMenu}  />
+        <MobileMenu
+            show={showMobileMenu}
+            setShow={setShowMobileMenu}
+            menuItems={menuItems}
+            setActiveMenu={setActiveMenu}
+            activeMenu={activeMenu} 
+        />
         {/* Main Page */}
         <div className="flex flex-col border w-full">
             {/* Header */}
@@ -88,7 +94,7 @@ const HomePage = () => {
                 </div>
             </div>
             {/* Actual main */}
-            <div className="flex flex-col gap-2 items-center justify-center border m-2 h-full rounded-sm">
+            <div className="flex flex-col gap-2 m-2 h-full rounded-sm">
             { activeMenu === 'AI Chat' ?
                  <AiChat />
                 : activeMenu === 'History' ?
