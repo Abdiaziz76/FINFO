@@ -9,7 +9,7 @@ _**Note**_: This directory only contains the client/frontend part of the project
 
 ## Purpose
 
-The purpose of this repository is to provide a collaborative space for development and improvement of the FINFO platform. By making the repository public, we aim to foster community engagement, allowing developers, contributors, and users to explore the codebase, report issues, and suggest enhancements.
+The purpose of this repository is to provide a collaborative space for development and improvement of the FINFO platform in fulfilment of the A2SV Generative AI hackathon. By making the repository public, we aim to foster community engagement, allowing developers, contributors, and users to explore the codebase, report issues, and suggest enhancements as we continue to develop the project ourselves.
 
 ## How Generative AI Models are Solving the Problem
 
