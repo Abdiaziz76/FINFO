@@ -2,7 +2,7 @@
 
 const History = () => {
     return (
-      <div>
+      <div className="dark:text-slate-200">
         History
       </div>
     )

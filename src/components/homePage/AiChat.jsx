@@ -8,11 +8,12 @@ const InputPrompt = () => {
     <div className="flex flex-col md:flex-row gap-2 items-center py-2 pr-8 mt-4 fixed bg-white dark:bg-slate-800 bottom-2 md:max-w-[1050px] w-full">
         <div className="flex gap-2 items-center p-2 px-4 w-full md:w-3/4 border dark:border-slate-600 rounded-md">
           <input type="text" className="w-full px-2 text-slate-600 dark:text-slate-200 bg-transparent focus:outline-none" />
-          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 text-xl"><BiMicrophone /></span>
-          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 text-xl"><BiSend /></span>
+          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 dark:hover:text-slate-500 text-xl"><BiMicrophone /></span>
+          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 dark:hover:text-slate-500 text-xl"><BiSend /></span>
         </div>
         <div className="flex ">
-          <span className="border dark:border-transparent p-2 rounded-md bg-blue-600 text-white hover:bg-blue-900 cursor-pointer flex items-center gap-2 ">
+          <span className="border dark:border-transparent p-2 rounded-md bg-blue-600 text-white transition-colors
+            hover:bg-blue-900 cursor-pointer flex items-center gap-2 ">
             <span className=""><BiMessageRoundedAdd /></span>Switch to new topic
           </span>
         </div>

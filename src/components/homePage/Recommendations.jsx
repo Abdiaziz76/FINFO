@@ -1,12 +1,12 @@
 // import React from 'react'
 
-const UserProfile = () => {
+const Recommendations = () => {
     return (
       <div className="dark:text-slate-200">
-        User Profile
+        Recommendations
       </div>
     )
   }
   
-  export default UserProfile
+  export default Recommendations
   

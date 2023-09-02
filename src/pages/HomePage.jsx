@@ -1,6 +1,7 @@
 // import React from 'react'
 import { useState } from 'react'
 import { BsChat, BsClockHistory } from 'react-icons/bs'
+import { BiLike } from 'react-icons/bi'
 import { CiUser } from 'react-icons/ci'
 import DarkModeSwitcher from '../components/DarkModeSwitch'
 import { Link } from 'react-router-dom'
@@ -12,6 +13,7 @@ import UserProfile from '../components/homePage/UserProfile'
 import History from '../components/homePage/History'
 
 import {profile} from '../assets/images/'
+import Recommendations from '../components/homePage/Recommendations'
 
 const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
     return (
@@ -50,10 +52,14 @@ const MobileMenu = ({ show, setShow, menuItems, setActiveMenu, activeMenu }) => 
 
 const HomePage = () => {
 
-    const [activeMenu, setActiveMenu] = useState('AI Chat')
+    const [activeMenu, setActiveMenu] = useState('Recommendations')
     const [showMobileMenu, setShowMobileMenu] = useState(false)
 
     const menuItems = [
+        {
+            icon: <BiLike />,
+            name: 'Recommendations',
+        },
         {
             icon: <BsChat />,
             name: 'AI Chat',
@@ -102,7 +108,10 @@ const HomePage = () => {
             </div>
             {/* Actual main */}
             <div className="flex flex-col gap-2 m-2 h-full rounded-sm">
-            { activeMenu === 'AI Chat' ?
+            {   
+                activeMenu === 'Recommendations' ?
+                 <Recommendations /> :
+                activeMenu === 'AI Chat' ?
                  <AiChat />
                 : activeMenu === 'History' ?
                  <History />
