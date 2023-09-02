@@ -1,11 +1,11 @@
 // import React from 'react'
 import { useState } from 'react'
-import { BsChat, BsClockHistory } from 'react-icons/bs'
+import { BsBook, BsChat, BsClockHistory } from 'react-icons/bs'
 import { BiLike } from 'react-icons/bi'
 import { CiUser } from 'react-icons/ci'
 import DarkModeSwitcher from '../components/DarkModeSwitch'
 import { Link } from 'react-router-dom'
-import { FaBars } from 'react-icons/fa'
+import { FaBars, FaBookReader } from 'react-icons/fa'
 import { AiOutlineClose } from 'react-icons/ai'
 
 import AiChat from '../components/homePage/AiChat'
@@ -14,6 +14,7 @@ import History from '../components/homePage/History'
 
 import {profile} from '../assets/images/'
 import Recommendations from '../components/homePage/Recommendations'
+import LessonsCatalog from '../components/homePage/Lessons'
 
 const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
     return (
@@ -71,7 +72,11 @@ const HomePage = () => {
         {
             icon: <CiUser />,
             name: 'Profile',
-        }
+        },
+        {
+            icon: <BsBook />,
+            name: 'Lessons',
+        },
     ]
   return (
     <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800">
@@ -115,7 +120,9 @@ const HomePage = () => {
                  <AiChat />
                 : activeMenu === 'History' ?
                  <History />
-                :
+                : activeMenu === 'Lessons' ?
+                    <LessonsCatalog />
+                :   
                  <UserProfile />
             }
             </div>
