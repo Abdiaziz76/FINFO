@@ -3,6 +3,10 @@ import { useState } from 'react'
 import { BsChat, BsClockHistory } from 'react-icons/bs'
 import { CiUser } from 'react-icons/ci'
 
+import AiChat from '../components/homePage/AiChat'
+import UserProfile from '../components/homePage/UserProfile'
+import Settings from '../components/homePage/Settings'
+
 const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
     return (
         <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 text-blue-700'} rounded-md text-slate-700
@@ -45,8 +49,17 @@ const HomePage = () => {
             </div>
         </div>
         {/* Main */}
-        <div className="flex flex-col border w-full">
-            <span className="">Main</span>
+        <div className="flex flex-col border w-full items-center justify-center">
+            <>
+            { activeMenu === 'AI Chat' ?
+                 <AiChat />
+                : activeMenu === 'History' ?
+                 <UserProfile />
+                :
+                 <Settings />
+            }
+            </>
+            {/* <span className="">Main</span> */}
         </div>
     </div>
   )
