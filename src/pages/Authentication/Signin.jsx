@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const Signin = () => {
+    const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -22,6 +23,7 @@ const Signin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('formData',formData);
+    navigate('/home')
     // Handle form submission (e.g., send data to a server for user authentication)
   };
 
