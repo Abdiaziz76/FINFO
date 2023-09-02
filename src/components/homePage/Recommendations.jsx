@@ -1,9 +1,14 @@
 // import React from 'react'
 
+import ChatHeader from "./ChatHeader"
+
 const Recommendations = () => {
     return (
       <div className="dark:text-slate-200">
-        Recommendations
+        <ChatHeader />
+        <div className="flex mt-8 flex-col border dark:border-slate-600 p-4 h-full">
+          Recommendations
+        </div>
       </div>
     )
   }

@@ -18,8 +18,8 @@ import LessonsCatalog from '../components/homePage/Lessons'
 
 const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
     return (
-        <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 dark:bg-slate-500 text-blue-700'} rounded-md dark:text-slate-300 text-slate-700
-            transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200 dark:hover:bg-slate-500`}
+        <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name ? 'bg-slate-200 dark:bg-blue-600 text-blue-700 dark:text-blue-100' : 'dark:text-slate-300 text-slate-700'} rounded-md
+            transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200 dark:hover:bg-blue-600`}
             onClick={() => setActiveMenu(item.name)}
         >
             <span className="">{item.icon}</span>
@@ -119,6 +119,8 @@ const HomePage = () => {
                 activeMenu === 'AI Chat' ?
                  <AiChat />
                 : activeMenu === 'History' ?
+                 <History setActiveMenu={setActiveMenu} />
+                :
                  <History />
                 : activeMenu === 'Lessons' ?
                     <LessonsCatalog />

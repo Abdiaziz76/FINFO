@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { BiMicrophone, BiSend, BiMessageRoundedAdd, BiShare, BiSolidDownload, BiLike, BiDislike } from 'react-icons/bi'
 import { BsFillChatQuoteFill } from 'react-icons/bs'
 import { profile } from '../../assets/images'
+import ChatHeader from './ChatHeader'
 
 const InputPrompt = () => {
   return (
@@ -61,10 +62,7 @@ const AiChat = () => {
   return (
     <div className="flex flex-col p-4 overflow-hidden relative h-full pb-32">
       { isEmpty &&
-        <div className="flex flex-col gap-2">
-          <span className="text-slate-700 font-medium">Get answers to your most pressing finance related questions in seconds</span>
-          <span className="text-slate-600 text-sm">Whether its finding your next banker or handling savings, we've got you covered!</span>
-        </div>
+        <ChatHeader />
       }
       {/* Requests/Questions & Responses */}
       <div className="flex flex-col gap-2">
