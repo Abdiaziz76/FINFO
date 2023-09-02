@@ -68,12 +68,11 @@ const HomePage = () => {
         }
     ]
   return (
-    <div className="flex border  dark:border-slate-500 w-full min-h-screen dark:bg-slate-800">
+    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800">
         {/* Sidebar */}
-        <div className="hidden md:flex flex-col md:w-48 h-full">
-            <div className="flex items-center justify-evenly gap-2 border-y  dark:border-slate-500 p-2 mb-4">
-                <Link to='/'><span className="text-blue-600 dark:text-blue-400 font-medium">FINFO</span></Link>
-              
+        <div className="hidden md:flex flex-col md:w-48 h-full fixed">
+            <div className="flex items-center border-y dark:border-slate-600 p-2 mb-4">
+                <span className="text-blue-600 font-medium">FINFO</span>
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
@@ -87,16 +86,17 @@ const HomePage = () => {
             activeMenu={activeMenu} 
         />
         {/* Main Page */}
-        <div className="flex flex-col border w-full">
+        <div className="flex flex-col border dark:border-slate-600 w-full md:ml-48">
             {/* Header */}
-            <div className="flex items-center justify-end border-b px-4 py-1">
-            <div className="mx-2">
-                    <DarkModeSwitcher />
-                </div>
+            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-white dark:bg-slate-800 w-full">
                 <div className="flex gap-2 items-center">
-                    <span className="hidden md:flex text-slate-600 font-medium">Jane Doe</span>
+                    <span className="hidden md:flex text-slate-600 dark:text-white font-medium">Jane Doe</span>
                     <span className=""><img src={profile} alt="" className="object-cover h-8 w-8 rounded-full overflow-hidden border" /></span>
-                    <span className="flex md:hidden text-slate-600 text-2xl" onClick={() => setShowMobileMenu(true)}><FaBars /></span>
+                    { showMobileMenu ?
+                        <span className="flex md:hidden text-slate-600 text-2xl" onClick={() => setShowMobileMenu(false)}><AiOutlineClose /></span>
+                        :
+                        <span className="flex md:hidden text-slate-600 text-2xl" onClick={() => setShowMobileMenu(true)}><FaBars /></span>
+                    }
                 </div>
             </div>
             {/* Actual main */}
