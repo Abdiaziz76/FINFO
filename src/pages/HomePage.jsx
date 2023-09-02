@@ -2,6 +2,8 @@
 import { useState } from 'react'
 import { BsChat, BsClockHistory } from 'react-icons/bs'
 import { CiUser } from 'react-icons/ci'
+import DarkModeSwitcher from '../components/DarkModeSwitch'
+import { Link } from 'react-router-dom'
 import { FaBars } from 'react-icons/fa'
 import { AiOutlineClose } from 'react-icons/ai'
 
@@ -13,8 +15,8 @@ import {profile} from '../assets/images/'
 
 const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
     return (
-        <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 text-blue-700'} rounded-md text-slate-700
-            transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200`}
+        <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 dark:bg-slate-500 text-blue-700'} rounded-md dark:text-slate-300 text-slate-700
+            transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200 dark:hover:bg-slate-500`}
             onClick={() => setActiveMenu(item.name)}
         >
             <span className="">{item.icon}</span>
@@ -66,11 +68,12 @@ const HomePage = () => {
         }
     ]
   return (
-    <div className="flex w-full min-h-screen relative">
+    <div className="flex border  dark:border-slate-500 w-full min-h-screen dark:bg-slate-800">
         {/* Sidebar */}
         <div className="hidden md:flex flex-col md:w-48 h-full">
-            <div className="flex items-center border-y p-2 mb-4">
-                <span className="text-blue-600 font-medium">FINFO</span>
+            <div className="flex items-center justify-evenly gap-2 border-y  dark:border-slate-500 p-2 mb-4">
+                <Link to='/'><span className="text-blue-600 dark:text-blue-400 font-medium">FINFO</span></Link>
+              
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
@@ -87,6 +90,9 @@ const HomePage = () => {
         <div className="flex flex-col border w-full">
             {/* Header */}
             <div className="flex items-center justify-end border-b px-4 py-1">
+            <div className="mx-2">
+                    <DarkModeSwitcher />
+                </div>
                 <div className="flex gap-2 items-center">
                     <span className="hidden md:flex text-slate-600 font-medium">Jane Doe</span>
                     <span className=""><img src={profile} alt="" className="object-cover h-8 w-8 rounded-full overflow-hidden border" /></span>

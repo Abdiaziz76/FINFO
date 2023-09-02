@@ -24,7 +24,7 @@ const Signup = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('formData',formData);
-    Navigate('/signin')
+    navigate('/signin')
     // Handle form submission (e.g., send data to a server for user registration)
   };
 
