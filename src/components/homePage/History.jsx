@@ -1,12 +1,12 @@
 // import React from 'react'
 
-const Settings = () => {
+const History = () => {
     return (
       <div>
-        Settings
+        History
       </div>
     )
   }
   
-  export default Settings
+  export default History
   
