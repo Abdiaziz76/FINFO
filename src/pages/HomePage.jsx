@@ -72,7 +72,7 @@ const HomePage = () => {
         {/* Sidebar */}
         <div className="hidden md:flex flex-col md:w-48 h-full fixed">
             <div className="flex items-center border-y dark:border-slate-600 p-2 mb-4">
-                <span className="text-blue-600 font-medium">FINFO</span>
+                <Link to={'/'} className="text-blue-600 font-medium">FINFO</Link>
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
@@ -90,6 +90,7 @@ const HomePage = () => {
             {/* Header */}
             <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-white dark:bg-slate-800 w-full">
                 <div className="flex gap-2 items-center">
+                    <DarkModeSwitcher />
                     <span className="hidden md:flex text-slate-600 dark:text-white font-medium">Jane Doe</span>
                     <span className=""><img src={profile} alt="" className="object-cover h-8 w-8 rounded-full overflow-hidden border" /></span>
                     { showMobileMenu ?
