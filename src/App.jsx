@@ -11,27 +11,34 @@ import Recommendations from "./pages/Recommendations";
 import LessonsCatalog from "./pages/Lessons";
 import UserProfile from "./pages/UserProfile";
 import History from "./pages/History";
+import PersistLogin from "./pages/Authentication/PersistLogin"
+import RequireAuth from "./pages/Authentication/RequireAuth"
+import { BrowserRouter as Router } from 'react-router-dom'
 
 
 function App() {
+  
   return (
     <div className="w-full h-full">
 
-      <AuthProvider>
+<Router>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />}></Route>
         {/* <Route path="/home" element={<HomePage />} /> */}
-
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/signin" element={<Signin />} />
-        <Route path="/chat" element={<AiChat />} />
-        <Route path="/recommendations" element={<Recommendations />} />
-        <Route path="/lessons" element={<LessonsCatalog />} />
-        <Route path="/profile" element={<UserProfile />} />
-        <Route path="/history" element={<History />} />
+        <Route element={<PersistLogin />}>
+          {/* <Route element={<RequireAuth allowedRoles={['100','300','500']} />}> */}
+        <Route path="/signup" element={<Signup />}></Route>
+        <Route path="/signin" element={<Signin />}></Route>
+        <Route path="/chat" element={<AiChat />}></Route>
+        <Route path="/recommendations" element={<Recommendations />}></Route>
+        <Route path="/lessons" element={<LessonsCatalog />}></Route>
+        <Route path="/profile" element={<UserProfile />}></Route>
+        <Route path="/history" element={<History />}></Route>
+        </Route>
+        {/* </Route> */}
 
       </Routes>
-      </AuthProvider>
+      </Router>
      
     </div>
   );

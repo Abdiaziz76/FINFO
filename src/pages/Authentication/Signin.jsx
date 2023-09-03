@@ -1,10 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import { axiosPublic } from '../../lib/axios/axios';
+
+
+import { axiosPublic } from "../../lib/axios/axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import useAuth from "../../hooks/useAuth";
+import jwt_decode from "jwt-decode";
 
 const Signin = () => {
     const navigate = useNavigate();
+    const { auth, setAuth } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,17 +30,58 @@ const Signin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('formData',formData);
+    let payload = {
+        email: formData.email.toLowerCase(),
+        password: formData.password,
+        };
+
+    // console.log('payload',payload);
+    
+
+    
     axiosPublic
-        .post('/api/sign-in/', formData)
+        .post('/api/sign-in/', payload)
         .then((res) => {
-            console.log('res', res);
-        })
+            // console.log('res', res);
+            if (res.request.status === 201 || res.request.status === 200) {
+                var decoded = jwt_decode(res.data.access);
+                // console.log('decoded',decoded)
+                var refresh_decoded = jwt_decode(res.data.refresh);
+                // console.log('refresh_decoded',refresh_decoded)
+        
+                localStorage.setItem("refresh", res.data.refresh);
+                setAuth({
+                  user_id: decoded.user_id,
+                  user: decoded.email,
+                  roles: decoded.user_group,
+                  username: decoded.first_name,
+                  accessToken: res.data.access,
+                });
+        
+                let cat = ['100'];
+                // cat.push(decoded.user_group);
+        
+                //  console.log("category",cat)
+                localStorage.setItem("cat", cat);
+        
+                setAuth((prevAuth) => ({
+                  ...prevAuth,
+                  roles: cat,
+                }));
+
+                // console.log('auth',auth)
+                
+        
+            navigate('/recommendations')
+  }})
         .catch((err) => {
             console.log('err', err);
         });
 
-    // navigate('/home')
+    
+
+
+   
     // Handle form submission (e.g., send data to a server for user authentication)
   };
 
