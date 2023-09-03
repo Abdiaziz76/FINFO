@@ -7,75 +7,49 @@ import DarkModeSwitcher from '../components/DarkModeSwitch'
 import { Link } from 'react-router-dom'
 import { FaBars, FaBookReader } from 'react-icons/fa'
 import { AiOutlineClose } from 'react-icons/ai'
+import {profile} from '../assets/images'
+import MobileMenu from './MobileMenu'
+import MenuItem from './MenuItem'
+import { useLocation } from 'react-router-dom'
 
-import AiChat from '../components/homePage/AiChat'
-import UserProfile from '../components/homePage/UserProfile'
-import History from '../components/homePage/History'
 
-import {profile} from '../assets/images/'
-import Recommendations from '../components/homePage/Recommendations'
-import LessonsCatalog from '../components/homePage/Lessons'
 
-const MenuItem = ({ item, activeMenu, setActiveMenu, }) => {
-    return (
-        <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 dark:bg-slate-500 text-blue-700'} rounded-md dark:text-slate-300 text-slate-700
-            transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200 dark:hover:bg-slate-500`}
-            onClick={() => setActiveMenu(item.name)}
-        >
-            <span className="">{item.icon}</span>
-            <span className="">{item.name}</span>
-        </div>
-    )
-}
+const HomePage = (Component) => function HOC() {
+    const location = useLocation();
 
-const MobileMenu = ({ show, setShow, menuItems, setActiveMenu, activeMenu }) => {
+//drop the slash before the pathname to get activemenu
+const path = location.pathname.slice(1);
 
-    // const isMobile = false;
-    const isMobile = true;
 
-    return (
-        <div className={`absolute top-0 ${show && isMobile ? 'left-0' : '-left-full' } flex flex-col gap-2 border px-4 z-10
-            bg-white h-full max-w-3/4 w-full`}>
-            <div className="flex items-center border-y p-2 mb-4 relative">
-                <span className="text-blue-600 font-medium">FININFO</span>
-                <span className="absolute right-2 text-slate-700 transition-colors hover:text-blue-600"
-                onClick={() => setShow(false)}
-                >
-                    <AiOutlineClose />
-                </span>
-            </div>
-           <div className="flex flex-col gap-2">
-            {menuItems.map((item, i) => <MenuItem key={i} item={item} setActiveMenu={setActiveMenu} activeMenu={activeMenu} />)}
-           </div>
-        </div>
-    )
-}
-
-const HomePage = () => {
-
-    const [activeMenu, setActiveMenu] = useState('Recommendations')
+    const [activeMenu, setActiveMenu] = useState(path)
     const [showMobileMenu, setShowMobileMenu] = useState(false)
+    console.log('activeMenu', activeMenu)
 
     const menuItems = [
         {
             icon: <BiLike />,
-            name: 'Recommendations',
+            name: 'recommendations',
+            link: '/recommendations',
         },
         {
             icon: <BsChat />,
-            name: 'AI Chat',
+            name: 'chat',
+            link: '/chat',
         },
         {
             icon: <BsClockHistory />,
-            name: 'History',
+            name: 'history',
+            link: '/history',
         },
         {
             icon: <CiUser />,
-            name: 'Profile',
+            name: 'profile',
+            link: '/profile',
         },
         {
             icon: <BsBook />,
-            name: 'Lessons',
+            name: 'lessons',
+            link: '/lessons',
         },
     ]
   return (
@@ -112,20 +86,9 @@ const HomePage = () => {
                 </div>
             </div>
             {/* Actual main */}
-            <div className="flex flex-col gap-2 m-2 h-full rounded-sm">
-            {   
-                activeMenu === 'Recommendations' ?
-                 <Recommendations /> :
-                activeMenu === 'AI Chat' ?
-                 <AiChat />
-                : activeMenu === 'History' ?
-                 <History />
-                : activeMenu === 'Lessons' ?
-                    <LessonsCatalog />
-                :   
-                 <UserProfile />
-            }
-            </div>
+            <main className="flex flex-col gap-2 m-2 h-full rounded-sm">
+            <Component />
+            </main>
             {/* <span className="">Main</span> */}
         </div>
     </div>

@@ -1,5 +1,7 @@
 // import React from 'react'
 
+import HomePage from "../../layouts/HomePage"
+
 const History = () => {
     return (
       <div className="dark:text-slate-200">
@@ -8,5 +10,5 @@ const History = () => {
     )
   }
   
-  export default History
+  export default HomePage(History)
   

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { BiMicrophone, BiSend, BiMessageRoundedAdd, BiShare, BiSolidDownload, BiLike, BiDislike } from 'react-icons/bi';
 import { BsFillChatQuoteFill } from 'react-icons/bs';
-import { profile } from '../../assets/images';
+import { profile } from '../assets/images';
+import HomePage from '../layouts/HomePage';
 
 const wsBaseUrl = 'ws://127.0.0.1:8001/';
 
-const AiChat = () => {
+function AiChat() {
   const [webSocket, setWebSocket] = useState(null);
   const [chatMessages, setChatMessages] = useState([]);
   const [messageInput, setMessageInput] = useState('');
@@ -88,4 +89,4 @@ const AiChat = () => {
   );
 };
 
-export default AiChat;
+export default HomePage(AiChat);
