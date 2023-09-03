@@ -58,7 +58,7 @@ const Signin = () => {
                   accessToken: res.data.access,
                 });
         
-                let cat = ['100'];
+                let cat = [];
                 // cat.push(decoded.user_group);
         
                 //  console.log("category",cat)

@@ -12,12 +12,14 @@ import MobileMenu from './MobileMenu'
 import MenuItem from './MenuItem'
 import { useLocation } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
+import {IoMdLogOut} from 'react-icons/io'
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
 const HomePage = (Component) => function HOC() {
     const location = useLocation();
-    const { auth } = useAuth();
+    const { auth , setAuth} = useAuth();
     console.log('auth', auth)
     
 
@@ -38,7 +40,7 @@ const path = location.pathname.slice(1);
         {
             icon: <BsChat />,
             name: 'chat',
-            link: '/chat',
+            link: '/gptchat',
         },
         {
             icon: <BsClockHistory />,
@@ -56,8 +58,22 @@ const path = location.pathname.slice(1);
             link: '/lessons',
         },
     ]
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        //confirm toast
+            toast.success("Logout Successful");
+        
+        // Clear refresh token from local storage
+        localStorage.removeItem("refresh");
+        // Clear access token from context
+        setAuth(null);
+    
+        window.location.reload();
+      };
   return (
-    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800">
+    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800 bg-slate-200">
+        <ToastContainer />
         {/* Sidebar */}
         <div className="hidden md:flex flex-col md:w-48 h-full fixed">
             <div className="flex items-center border-y dark:border-slate-600 p-2 mb-4">
@@ -66,6 +82,21 @@ const path = location.pathname.slice(1);
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
             </div>
+
+            <div onClick={handleLogout} className="dark:text-slate-200 mx-4 mb-2 mt-auto">
+          <a
+               
+                href=""
+                
+              >
+                 <h6 className="flex items-center dark:text-white font-medium text-sm">
+              <IoMdLogOut className="pr-2 text-2xl dark:text-white" /> Logout
+            </h6>
+            
+              </a>
+           
+          </div>
+
         </div>
         <MobileMenu
             show={showMobileMenu}
@@ -77,7 +108,7 @@ const path = location.pathname.slice(1);
         {/* Main Page */}
         <div className="flex flex-col border dark:border-slate-600 w-full md:ml-48">
             {/* Header */}
-            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-white dark:bg-slate-800 w-full">
+            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-slate-200 dark:bg-slate-800 w-full">
                 <div className="flex gap-2 items-center">
                     <DarkModeSwitcher />
                     <span className="hidden md:flex text-slate-600 dark:text-white font-medium">{auth?.username}</span>
