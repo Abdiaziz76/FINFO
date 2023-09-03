@@ -9,7 +9,7 @@ const LandingPage = () => {
       <nav className="bg-blue-500 dark:bg-black py-4 px-2">
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
-            <div className="text-white font-bold text-2xl">FINFO</div>
+            <div className="text-white font-bold text-2xl">FININFO</div>
             <div className="flex items-center justify-between gap-4">
               <DarkModeSwitcher />
               <ul className="hidden md:flex space-x-6">
@@ -101,7 +101,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-blue-500 dark:bg-black py-4">
         <div className="container mx-auto text-center text-white">
-          &copy; 2023 FINFO
+          &copy; 2023 FININFO
         </div>
       </footer>
     </div>

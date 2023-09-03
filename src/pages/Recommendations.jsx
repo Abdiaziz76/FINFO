@@ -1,5 +1,6 @@
 // import React from 'react'
 
+import HomePage from '../layouts/HomePage';
 import ChatHeader from "./ChatHeader"
 
 const Recommendations = () => {
@@ -13,5 +14,5 @@ const Recommendations = () => {
     )
   }
   
-  export default Recommendations
+  export default HomePage(Recommendations)
   

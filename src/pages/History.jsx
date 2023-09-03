@@ -1,8 +1,11 @@
 // import React from 'react'
 
+import HomePage from "../layouts/HomePage"
+
+
 import { useState } from "react"
 import ChatHeader from "./ChatHeader"
-import { profile } from '../../assets/images'
+import { profile } from '../assets/images'
 import { BsFillChatQuoteFill } from 'react-icons/bs'
 
 const SummaryItem = ({ item }) => {
@@ -65,5 +68,5 @@ const History = ({ setActiveMenu }) => {
     )
   }
   
-  export default History
+  export default HomePage(History)
   
