@@ -27,7 +27,7 @@ const LessonsCatalog = () => {
   ]);
 
   const [selectedLesson, setSelectedLesson] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   async function fetchLessonContent(lessonTitle) {
     const API_KEY = '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';
@@ -44,7 +44,7 @@ const LessonsCatalog = () => {
     };
 
     try {
-      setIsLoading(true); // Set loading state to true before fetching
+      setIsLoading(true);
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: {
@@ -63,20 +63,18 @@ const LessonsCatalog = () => {
       return content;
     } catch (error) {
       console.error('Error fetching content:', error);
-      return ''; // Return an empty string on error
+      return '';
     } finally {
-      setIsLoading(false); // Set loading state to false after fetching
+      setIsLoading(false);
     }
   }
 
   const handleLessonClick = async (index) => {
     const lesson = lessonsData[index];
     if (!lesson.content) {
-      // Fetch content from the GPT API if it's not already loaded
       const content = await fetchLessonContent(lesson.title);
       lesson.content = content;
       setSelectedLesson(index);
-      // Clone the lessonsData array to trigger a re-render
       const updatedLessonsData = [...lessonsData];
       setLessonsData(updatedLessonsData);
     } else {
@@ -90,18 +88,17 @@ const LessonsCatalog = () => {
 
   return (
     <div className="container mx-auto py-8 overflow-y-auto">
-      {isLoading ? ( // Render loading screen if isLoading is true
+      {isLoading ? (
         <div className="text-center dark:text-white text-xl">
           <p>Your Lesson is Loading...</p>
         </div>
       ) : selectedLesson !== null ? (
-        // Display a single lesson when a lesson is selected
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
           <span
             onClick={handleBackToCatalog}
             className="cursor-pointer text-blue-400 hover:text-blue-600 text-xl mr-2"
           >
-            <FaArrowLeft /> {/* Arrow icon for back */}
+            <FaArrowLeft />
           </span>
           <h2 className="text-xl font-semibold mb-2 dark:text-white">
             {lessonsData[selectedLesson].title}
@@ -109,7 +106,6 @@ const LessonsCatalog = () => {
           <div dangerouslySetInnerHTML={{ __html: lessonsData[selectedLesson].content }} />
         </div>
       ) : (
-        // Display the lessons catalog when no lesson is selected
         <div>
           <h1 className="text-2xl font-semibold mb-4 dark:text-white">
             Lessons Catalog
@@ -127,7 +123,7 @@ const LessonsCatalog = () => {
                   {lesson.title}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {lesson.placeholder.slice(0, 151)}... {/* Truncate content to 150 characters */}
+                  {lesson.placeholder.slice(0, 151)}
                 </p>
                 <button
                   onClick={() => handleLessonClick(index)}
