@@ -30,7 +30,7 @@ const LessonsCatalog = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchLessonContent(lessonTitle) {
-    const API_KEY = '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';
+    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
     const systemMessage = [
       {
         role: 'system',

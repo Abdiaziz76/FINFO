@@ -3,7 +3,9 @@ import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import HomePage from '../layouts/HomePage';
 
-const API_KEY = "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";
+
+const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
+
 const userCountry = "Kenya";
 const systemMessage = {
   role: "system",
