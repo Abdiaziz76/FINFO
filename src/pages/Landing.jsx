@@ -68,7 +68,7 @@ const LandingPage = () => {
       </section>
 
       {/* About Section */}
-      <section className="py-16 border px-8 md:px-16">
+      <section className="py-16 px-8 md:px-16">
         <div className="container mx-auto">
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-start md:text-center">
             About Us
@@ -88,7 +88,7 @@ const LandingPage = () => {
           <p className="text-gray-600 dark:text-slate-200 mb-6 text-start md:text-center">
             With you at every financial step you want to take
           </p>
-          <div className="flex justify-between gap-8 items-center flex-wrap md:border py-8 px-8 md:px-16">
+          <div className="flex justify-between gap-8 items-center flex-wrap md:border dark:border-slate-400 py-8 px-8 md:px-16">
             {/* service */}
             {
               services?.map(([name, description]) =>
@@ -113,7 +113,7 @@ const LandingPage = () => {
           </p>
           {/* Contact us form */}
           <div className="flex justify-center items-center">
-            <form onSubmit={() => {}} className="w-80 p-6 rounded-lg border">
+            <form onSubmit={() => {}} className="w-80 p-6 rounded-lg border dark:border-slate-600">
               <div className="mb-4">
                 <input
                   type="email"
@@ -121,7 +121,7 @@ const LandingPage = () => {
                   value=''
                   onChange={() => {}}
                   placeholder="Email"
-                  className="w-full px-4 py-2 border rounded focus:outline-none"
+                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-slate-600 rounded focus:outline-none"
                   required
                 />
               </div>
@@ -132,7 +132,7 @@ const LandingPage = () => {
                   value=''
                   onChange={() => {}}
                   placeholder="Message"
-                  className="w-full px-4 py-2 border rounded pr-10 focus:outline-none"
+                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-slate-600 rounded pr-10 focus:outline-none"
                   required
                 />
               </div>
