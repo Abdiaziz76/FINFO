@@ -16,7 +16,7 @@ import {profile} from '../assets/images/'
 import Recommendations from '../components/homePage/Recommendations'
 import LessonsCatalog from '../components/homePage/Lessons'
 
-const MenuItem = ({ item, activeMenu, setActiveMenu }) => {
+const MenuItem = ({ item, activeMenu, setActiveMenu, }) => {
     return (
         <div className={`flex gap-2 items-center px-4 py-1 ${activeMenu === item.name && 'bg-slate-200 dark:bg-slate-500 text-blue-700'} rounded-md dark:text-slate-300 text-slate-700
             transition-colors cursor-pointer hover:text-blue-700 hover:bg-slate-200 dark:hover:bg-slate-500`}
@@ -37,7 +37,7 @@ const MobileMenu = ({ show, setShow, menuItems, setActiveMenu, activeMenu }) => 
         <div className={`absolute top-0 ${show && isMobile ? 'left-0' : '-left-full' } flex flex-col gap-2 border px-4 z-10
             bg-white h-full max-w-3/4 w-full`}>
             <div className="flex items-center border-y p-2 mb-4 relative">
-                <span className="text-blue-600 font-medium">FINFO</span>
+                <span className="text-blue-600 font-medium">FININFO</span>
                 <span className="absolute right-2 text-slate-700 transition-colors hover:text-blue-600"
                 onClick={() => setShow(false)}
                 >

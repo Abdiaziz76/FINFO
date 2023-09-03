@@ -1,85 +1,91 @@
-import { useState } from 'react'
-import { BiMicrophone, BiSend, BiMessageRoundedAdd, BiShare, BiSolidDownload, BiLike, BiDislike } from 'react-icons/bi'
-import { BsFillChatQuoteFill } from 'react-icons/bs'
-import { profile } from '../../assets/images'
+import { useState, useEffect } from 'react';
+import { BiMicrophone, BiSend, BiMessageRoundedAdd, BiShare, BiSolidDownload, BiLike, BiDislike } from 'react-icons/bi';
+import { BsFillChatQuoteFill } from 'react-icons/bs';
+import { profile } from '../../assets/images';
 
-const InputPrompt = () => {
-  return (
-    <div className="flex flex-col md:flex-row gap-2 items-center py-2 pr-8 mt-4 fixed bg-white dark:bg-slate-800 bottom-2 md:max-w-[1050px] w-full">
-        <div className="flex gap-2 items-center p-2 px-4 w-full md:w-3/4 border dark:border-slate-600 rounded-md">
-          <input type="text" className="w-full px-2 text-slate-600 dark:text-slate-200 bg-transparent focus:outline-none" />
-          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 dark:hover:text-slate-500 text-xl"><BiMicrophone /></span>
-          <span className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 dark:hover:text-slate-500 text-xl"><BiSend /></span>
-        </div>
-        <div className="flex ">
-          <span className="border dark:border-transparent p-2 rounded-md bg-blue-600 text-white transition-colors
-            hover:bg-blue-900 cursor-pointer flex items-center gap-2 ">
-            <span className=""><BiMessageRoundedAdd /></span>Switch to new topic
-          </span>
-        </div>
-      </div>
-  )
-}
-
-const Prompt = () => {
-  return (
-    <div className="flex mt-2 justify-end">
-      <div className="flex items-center gap-2 p-1 px-3 bg-gray-200 dark:bg-gray-400 rounded-md">
-        {/* <span className="text-start">sample prompt or question Lorem ipsum dolor sit amet consectetur adipisicing elit. Est doloremque ad porro laudantium explicabo veritatis ipsa ut exercitationem adipisci dolor rem laborum, dolore excepturi eius in ratione assumenda quisquam obcaecati!</span> */}
-        <span className="text-start">sample prompt or question Lorem ipsum dolor sit in ratione assumenda quisquam obcaecati!</span>
-        <span className="w-16 flex items-center justify-end"><img src={profile} alt="" className="object-cover w-8 h-8 rounded-full overflow-hidden border" /></span>
-      </div>
-    </div>
-  )
-}
-
-const Response = () => {
-  return (
-    <div className="flex flex-col gap-2 mt-2 justify-start border dark:border-slate-600 rounded-md">
-      <div className="flex items-center justify-between p-2">
-        <span className="bg-blue-600 border p-2 rounded-full border-blue-100"><BsFillChatQuoteFill className="text-white" /></span>
-        <div className="flex gap-2 text-blue-600 dark:text-slate-500 transition-colors">
-          <span className="hover:text-blue-900 cursor-pointer"><BiLike /></span>
-          <span className="hover:text-blue-900 cursor-pointer"><BiDislike /></span>
-          <span className="hover:text-blue-900 cursor-pointer"><BiShare /></span>
-          <span className="hover:text-blue-900 cursor-pointer"><BiSolidDownload /></span>
-        </div>
-      </div>
-      <div className="flex flex-col gap-2 p-1 px-3">
-        <span className="text-start text-slate-500 dark:text-slate-400 font-medium">Sample response header, usually a summary of the question/request</span>
-        <span className="text-start dark:text-slate-300">sample response: Lorem ipsum dolor sit amet consectetur adipisicing elit. Est doloremque ad porro laudantium explicabo veritatis ipsa ut exercitationem adipisci dolor rem laborum, dolore excepturi eius in ratione assumenda quisquam obcaecati!</span>
-        {/* <span className="text-start">sample prompt or question Lorem quisquam obcaecati!</span> */}
-      </div>
-    </div>
-  )
-}
+const wsBaseUrl = 'ws://127.0.0.1:8001/';
 
 const AiChat = () => {
+  const [webSocket, setWebSocket] = useState(null);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState('');
 
-  const [isEmpty, setIsEmpty] = useState(false) // only show the header if prompting hasn't started...
+  useEffect(() => {
+    // Replace 'your-websocket-url' with the actual WebSocket URL of your Django server.
+    const ws = new WebSocket(`${wsBaseUrl}ws/chat/finfo/`);
+
+    ws.onopen = () => {
+      console.log('WebSocket connection opened');
+      setWebSocket(ws);
+    };
+
+    ws.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    ws.onmessage = (event) => {
+      const messageData = JSON.parse(event.data);
+      // Handle incoming messages and update the chatMessages state.
+      setChatMessages((prevMessages) => [...prevMessages, messageData]);
+    };
+
+    return () => {
+      if (webSocket) {
+        webSocket.close();
+      }
+    };
+  }, []);
+
+  const sendMessage = () => {
+    if (webSocket && messageInput.trim() !== '') {
+      // Send the message as JSON to the WebSocket server.
+      const messageData = {
+        message: messageInput,
+      };
+      webSocket.send(JSON.stringify(messageData));
+      setMessageInput('');
+    }
+  };
 
   return (
     <div className="flex flex-col p-4 overflow-hidden relative h-full pb-32">
-      { isEmpty &&
-        <div className="flex flex-col gap-2">
-          <span className="text-slate-700 font-medium">Get answers to your most pressing finance related questions in seconds</span>
-          <span className="text-slate-600 text-sm">Whether its finding your next banker or handling savings, we've got you covered!</span>
-        </div>
-      }
-      {/* Requests/Questions & Responses */}
+      {/* Your chat UI code here, using chatMessages state to display messages */}
       <div className="flex flex-col gap-2">
-        {
-          [1,2,3,4].map((req, i) =>
-          <div key={i}>
-            <Prompt />
-            <Response />
-          </div>)
-        }
+        {chatMessages.map((message, index) => (
+          <div key={index}>
+            {/* Render chat messages using the message object */}
+            <div className="text-start">{message.message}</div>
+          </div>
+        ))}
       </div>
-      {/* prompting */}
-      <InputPrompt />
+      {/* Input prompt and sending messages */}
+      <div className="flex flex-col md:flex-row gap-2 items-center py-2 pr-8 mt-4 fixed bg-white dark:bg-slate-800 bottom-2 md:max-w-[1050px] w-full">
+        <div className="flex gap-2 items-center p-2 px-4 w-full md:w-3/4 border dark:border-slate-600 rounded-md">
+          <input
+            type="text"
+            className="w-full px-2 text-slate-600 dark:text-slate-200 bg-transparent focus:outline-none"
+            placeholder="Type your message..."
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+          />
+          <span
+            className="text-slate-600 dark:text-slate-200 transition-colors hover:text-blue-700 dark:hover:text-slate-500 text-xl"
+            onClick={sendMessage}
+          >
+            <BiSend />
+          </span>
+        </div>
+        <div className="flex">
+          <span className="border dark:border-transparent p-2 rounded-md bg-blue-600 text-white transition-colors hover:bg-blue-900 cursor-pointer flex items-center gap-2">
+            <span className="">
+              <BiMessageRoundedAdd />
+            </span>
+            Switch to new topic
+          </span>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default AiChat
+export default AiChat;

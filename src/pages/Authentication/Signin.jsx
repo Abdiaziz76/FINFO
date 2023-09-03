@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { axiosPublic } from '../../lib/axios/axios';
 
 const Signin = () => {
     const navigate = useNavigate();
@@ -23,14 +24,23 @@ const Signin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('formData',formData);
-    navigate('/home')
+    axiosPublic
+        .post('/api/sign-in/', formData)
+        .then((res) => {
+            console.log('res', res);
+        })
+        .catch((err) => {
+            console.log('err', err);
+        });
+
+    // navigate('/home')
     // Handle form submission (e.g., send data to a server for user authentication)
   };
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-blue-200">
       <form onSubmit={handleSubmit} className="w-80 p-6 bg-white shadow-md rounded-lg">
-        <h2 className='text-2xl font-semibold text-blue-500'><Link to='/' >FINFO</Link></h2>
+        <h2 className='text-2xl font-semibold text-blue-500'><Link to='/' >FININFO</Link></h2>
         <h2 className="text-xl font-semibold mb-4">Sign In</h2>
         <div className="mb-4">
           <input
