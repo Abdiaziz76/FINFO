@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaMoneyBill, FaShieldAlt, FaChartBar, FaRetweet, FaCreditCard, FaDollarSign, FaChartPie, FaHome, FaExclamationTriangle, FaArrowLeft } from 'react-icons/fa';
-import HomePage from '../../layouts/HomePage';
+import HomePage from '../layouts/HomePage';
 
 const LessonsCatalog = () => {
     const lessonsData = [

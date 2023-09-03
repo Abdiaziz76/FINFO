@@ -7,10 +7,10 @@ import Signin from "./pages/Authentication/Signin";
 import HomePage from "./layouts/HomePage";
 import { AuthProvider } from "./context/AuthProvider";
 import AiChat from "./pages/AiChat";
-import Recommendations from "./components/homePage/Recommendations";
-import LessonsCatalog from "./components/homePage/Lessons";
-import UserProfile from "./components/homePage/UserProfile";
-import History from "./components/homePage/History";
+import Recommendations from "./pages/Recommendations";
+import LessonsCatalog from "./pages/Lessons";
+import UserProfile from "./pages/UserProfile";
+import History from "./pages/History";
 
 
 function App() {
