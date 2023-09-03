@@ -14,6 +14,7 @@ import History from "./pages/History";
 import PersistLogin from "./pages/Authentication/PersistLogin"
 import RequireAuth from "./pages/Authentication/RequireAuth"
 import { BrowserRouter as Router } from 'react-router-dom'
+import GptChat from "./pages/GptChat";
 
 
 function App() {
@@ -24,18 +25,20 @@ function App() {
 <Router>
       <Routes>
         <Route path="/" element={<LandingPage />}></Route>
-        {/* <Route path="/home" element={<HomePage />} /> */}
-        <Route element={<PersistLogin />}>
-          {/* <Route element={<RequireAuth allowedRoles={['100','300','500']} />}> */}
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/signin" element={<Signin />}></Route>
+        {/* <Route path="/home" element={<HomePage />} /> */}
+        <Route element={<PersistLogin />}>
+          <Route element={<RequireAuth allowedRoles={[]} />}>
+       
         <Route path="/chat" element={<AiChat />}></Route>
         <Route path="/recommendations" element={<Recommendations />}></Route>
         <Route path="/lessons" element={<LessonsCatalog />}></Route>
         <Route path="/profile" element={<UserProfile />}></Route>
         <Route path="/history" element={<History />}></Route>
+        <Route path="/gptchat" element={<GptChat />}></Route>
         </Route>
-        {/* </Route> */}
+        </Route>
 
       </Routes>
       </Router>

@@ -1,64 +1,87 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { FaMoneyBill, FaShieldAlt, FaChartBar, FaRetweet, FaCreditCard, FaDollarSign, FaChartPie, FaHome, FaExclamationTriangle, FaArrowLeft } from 'react-icons/fa';
+import { FaMoneyBill, FaShieldAlt, FaChartBar, FaArrowLeft } from 'react-icons/fa';
 import HomePage from '../layouts/HomePage';
 
-const LessonsCatalog = () => {
-    const lessonsData = [
-        {   icon: <FaMoneyBill />,
-            title: 'Introduction to Budgeting',
-            content:
-              'In this comprehensive lesson, you will delve deep into the fundamentals of budgeting and financial planning. You will learn how to create a budget plan that aligns with your financial goals and objectives. Discover the importance of tracking expenses, setting savings goals, and making informed financial decisions. By the end of this lesson, you will have the knowledge and skills to take control of your finances and achieve financial stability.',
-            
-          },
-        // Add more lessons here
-        {
-            icon: <FaShieldAlt />,
-          title: 'Fraud Prevention',
-          content: 'In this lesson, you will learn the basics of fraud prevention and how to create a budget plan',
-        },
-        {
-            icon: <FaChartBar />,
-          title: 'Investing Strategies',
-          content: 'Discover various investment strategies and how to make informed investment decisions',
-        },
-        {
-            icon: <FaRetweet />,
-          title: 'Retirement Planning',
-          content: 'Learn how to plan for a secure and comfortable retirement',
-        },
-        {
-            icon: <FaCreditCard />,
-            title: "Understanding Credit Cards",
-            content: "Explore the world of credit cards, their benefits, risks, and how to use them wisely to build good credit."
-          },
-          {
-            icon: <FaDollarSign />,
-            title: "Mastering Tax Planning",
-            content: "Learn the fundamentals of tax planning, deductions, credits, and strategies to optimize your tax return."
-          },
-          {
-            icon: <FaChartPie />,
-            title: "Diversifying Your Investments",
-            content: "Discover the importance of diversifying your investment portfolio to manage risk and achieve your financial goals."
-          },
-          {
-            icon: <FaHome />,
-            title: "Real Estate Investing Basics",
-            content: "Dive into the world of real estate investment, including buying, renting, and managing properties for financial gain."
-          },
-          {
-            icon: <FaExclamationTriangle />,
-            title: "Creating a Financial Safety Net",
-            content: "Learn how to build and maintain an emergency fund to protect yourself from unexpected financial setbacks."
-          }
+const userCountry = "Kenya";
 
-        ];
+const LessonsCatalog = () => {
+  const [lessonsData, setLessonsData] = useState([
+    {
+      icon: <FaMoneyBill />,
+      title: 'Introduction to Budgeting',
+      placeholder: 'Learn how to create a budget and manage your money',
+      content: '',
+    },
+    {
+      icon: <FaShieldAlt />,
+      title: 'Fraud Prevention',
+      placeholder: 'Learn how to protect yourself from fraud and scams',
+      content: '',
+    },
+    {
+      icon: <FaChartBar />,
+      title: 'Investing Strategies',
+      placeholder: 'Discover various investment strategies and how to make informed investment decisions',
+      content: '',
+    },
+  ]);
 
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [isLoading, setIsLoading] = useState(false); // Added loading state
 
-  const handleLessonClick = (index) => {
-    setSelectedLesson(index);
+  async function fetchLessonContent(lessonTitle) {
+    const API_KEY = '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';
+    const systemMessage = [
+      {
+        role: 'system',
+        content: `Explain ${lessonTitle} like you're talking to a novice in ${userCountry}. present the information in a way that is easy to understand. present the information in a readable manner, use titles and subtitles, and lists where necessary. Explain ${lessonTitle} as if you're creating a structured document for someone in ${userCountry}. Provide clear html tagged headings, use paragraphs, lists, and formatting for better readability. return rich text with html tags so as it is displayed properly to the user. strictly return HTML5 formatted text which contains only the body tag. you can add tailwind styles to the html tags to make the content more readable.`,
+      },
+    ];
+
+    const apiRequestBody = {
+      model: "gpt-3.5-turbo",
+      messages: systemMessage,
+    };
+
+    try {
+      setIsLoading(true); // Set loading state to true before fetching
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": "Bearer " + API_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(apiRequestBody)
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch content: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      const content = data.choices[0].message.content;
+      return content;
+    } catch (error) {
+      console.error('Error fetching content:', error);
+      return ''; // Return an empty string on error
+    } finally {
+      setIsLoading(false); // Set loading state to false after fetching
+    }
+  }
+
+  const handleLessonClick = async (index) => {
+    const lesson = lessonsData[index];
+    if (!lesson.content) {
+      // Fetch content from the GPT API if it's not already loaded
+      const content = await fetchLessonContent(lesson.title);
+      lesson.content = content;
+      setSelectedLesson(index);
+      // Clone the lessonsData array to trigger a re-render
+      const updatedLessonsData = [...lessonsData];
+      setLessonsData(updatedLessonsData);
+    } else {
+      setSelectedLesson(index);
+    }
   };
 
   const handleBackToCatalog = () => {
@@ -67,45 +90,44 @@ const LessonsCatalog = () => {
 
   return (
     <div className="container mx-auto py-8 overflow-y-auto">
-    
-      {selectedLesson !== null ? (
+      {isLoading ? ( // Render loading screen if isLoading is true
+        <div className="text-center dark:text-white text-xl">
+          <p>Your Lesson is Loading...</p>
+        </div>
+      ) : selectedLesson !== null ? (
         // Display a single lesson when a lesson is selected
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
-              <span
-              onClick={handleBackToCatalog}
-              className="cursor-pointer text-blue-400 hover:text-blue-600 text-xl mr-2"
-            >
-              <FaArrowLeft /> {/* Arrow icon for back */}
-            </span>
+          <span
+            onClick={handleBackToCatalog}
+            className="cursor-pointer text-blue-400 hover:text-blue-600 text-xl mr-2"
+          >
+            <FaArrowLeft /> {/* Arrow icon for back */}
+          </span>
           <h2 className="text-xl font-semibold mb-2 dark:text-white">
             {lessonsData[selectedLesson].title}
           </h2>
-          <p className="text-gray-600 dark:text-gray-300 mb-4">
-            {lessonsData[selectedLesson].content}
-          </p>
-         
+          <div dangerouslySetInnerHTML={{ __html: lessonsData[selectedLesson].content }} />
         </div>
       ) : (
         // Display the lessons catalog when no lesson is selected
-       
-      
         <div>
-             <h1 className="text-2xl font-semibold mb-4 dark:text-white">
-        Lessons Catalog
-      </h1>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            
+          <h1 className="text-2xl font-semibold mb-4 dark:text-white">
+            Lessons Catalog
+          </h1>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {lessonsData.map((lesson, index) => (
               <div
                 key={index}
                 className="bg-slate-200 flex flex-col justify-between dark:bg-slate-600 p-4 rounded-lg shadow-md transition duration-500"
               >
-                  <span className="self-center flex items-center justify-center text-5xl text-blue-400">{lesson.icon} </span>
+                <span className="self-center flex items-center justify-center text-5xl text-blue-400">
+                  {lesson.icon}{' '}
+                </span>
                 <h2 className="text-xl font-semibold mb-2 dark:text-white">
                   {lesson.title}
                 </h2>
                 <p className="text-gray-600 dark:text-gray-300 mb-4">
-                  {lesson.content.slice(0, 151)}... {/* Truncate content to 150 characters */}
+                  {lesson.placeholder.slice(0, 151)}... {/* Truncate content to 150 characters */}
                 </p>
                 <button
                   onClick={() => handleLessonClick(index)}
@@ -115,9 +137,8 @@ const LessonsCatalog = () => {
                 </button>
               </div>
             ))}
-                  </div>
+          </div>
         </div>
-      
       )}
     </div>
   );
