@@ -11,7 +11,9 @@ const Signup = () => {
     password: '',
     firstname: '',
     lastname: '',
+    phonenumber: '',
     confirmPassword: '',
+
   });
 
   const [showPassword, setShowPassword] = useState(false);
@@ -39,21 +41,23 @@ const Signup = () => {
     const payload = {
       email: formData.email,
       password: formData.password,
-      firstname: formData.firstname,
-      lastname: formData.lastname,
+      first_name: formData.firstname,
+      last_name: formData.lastname,
+      phone_number: formData.phonenumber,
     };
     console.log('payload', payload);
     axiosPublic
-      .post('/auth/signup', payload)
+      .post('/api/users/', payload)
       .then((res) => {
         console.log('res', res);
+        navigate('/signin');
       })
       .catch((err) => {
         console.log('err', err);
       });
       
 
-    navigate('/signin');
+ 
     // Handle form submission (e.g., send data to a server for user registration)
   };
 
@@ -76,6 +80,12 @@ const Signup = () => {
       name: 'email',
       value: formData.email,
       placeholder: 'Email',
+    },
+    {
+      type: 'tel',
+      name: 'phonenumber',
+      value: formData.phonenumber,
+      placeholder: 'Phone Number',
     },
     {
       type: showPassword ? 'text' : 'password',

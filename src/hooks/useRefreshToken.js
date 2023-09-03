@@ -29,7 +29,7 @@ const useRefreshToken = () => {
           //let cat = decoded.user_category.split(",");
            cat = cat.map(Number)
 
-          return{...prev,user_id:decoded.user_id,user:decoded.email,roles:cat,username:decoded.username,accessToken:data.access}
+          return{...prev,user_id:decoded.user_id,user:decoded.email,roles:cat,username:decoded.first_name,accessToken:data.access}
       });
       return data;
    }
