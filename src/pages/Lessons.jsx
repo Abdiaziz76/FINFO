@@ -90,7 +90,8 @@ const LessonsCatalog = () => {
     <div className="container mx-auto py-8 overflow-y-auto">
       {isLoading ? (
         <div className="text-center dark:text-white text-xl">
-          <p>Your Lesson is Loading...</p>
+          <p>Lesson is Loading...
+           This might take upto 30 secs</p>
         </div>
       ) : selectedLesson !== null ? (
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
