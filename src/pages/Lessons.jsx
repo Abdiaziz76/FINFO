@@ -30,7 +30,7 @@ const LessonsCatalog = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   async function fetchLessonContent(lessonTitle) {
-    const API_KEY = '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';
+    const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
     const systemMessage = [
       {
         role: 'system',
@@ -90,7 +90,8 @@ const LessonsCatalog = () => {
     <div className="container mx-auto py-8 overflow-y-auto">
       {isLoading ? (
         <div className="text-center dark:text-white text-xl">
-          <p>Your Lesson is Loading...</p>
+          <p>Lesson is Loading...
+           This might take upto 30 secs</p>
         </div>
       ) : selectedLesson !== null ? (
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
