@@ -2,7 +2,7 @@ import { useState } from 'react'
 import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
 import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
 import HomePage from '../layouts/HomePage';
-
+import { useChat } from '../context/chatContext';
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -27,87 +27,89 @@ const systemMessage = {
 };
 
 function GptChat() {
-  const [messages, setMessages] = useState([
-    {
-      message: "Hello, I'm Here to help Ask me anything!",
-      sentTime: "just now",
-      sender: "ChatGPT"
-    }
-  ]);
+  const { messages, addMessage } = useChat(); // Use the chat context
   const [isTyping, setIsTyping] = useState(false);
 
   const handleSend = async (message) => {
-    const newMessage = {
+    console.log('users message', message)
+    const userMessage = {
       message,
       direction: 'outgoing',
-      sender: "user"
+      sender: 'user',
     };
-
-    const newMessages = [...messages, newMessage];
-    
-    setMessages(newMessages);
-
+  
+    // Display the user's message immediately
+    addMessage(userMessage);
+  
     setIsTyping(true);
-    await processMessageToChatGPT(newMessages);
-  };
-
-  async function processMessageToChatGPT(chatMessages) {
-    let apiMessages = chatMessages.map((messageObject) => {
-      let role = "";
-      if (messageObject.sender === "ChatGPT") {
-        role = "assistant";
-      } else {
-        role = "user";
-      }
-      return { role: role, content: messageObject.message}
-    });
-
-    const apiRequestBody = {
-      "model": "gpt-3.5-turbo",
-      "messages": [
-        systemMessage,
-        ...apiMessages
-      ]
-    }
-
-    await fetch("https://api.openai.com/v1/chat/completions", 
-    {
-      method: "POST",
-      headers: {
-        "Authorization": "Bearer " + API_KEY,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(apiRequestBody)
-    }).then((data) => {
-      return data.json();
-    }).then((data) => {
-      setMessages([...chatMessages, {
-        message: data.choices[0].message.content,
-        sender: "ChatGPT"
-      }]);
+  
+    try {
+      const chatGptResponse = await processMessageToChatGPT(message);
+  
+      // Display ChatGPT's response
+      addMessage({
+        message: chatGptResponse,
+        direction: 'incoming',
+        sender: 'ChatGPT',
+      });
+    } catch (error) {
+      console.error('Error processing message:', error);
+    } finally {
       setIsTyping(false);
+    }
+  };
+  
+  async function processMessageToChatGPT(userMessage) {
+    const apiMessages = [
+      systemMessage,
+      ...messages.map((messageObject) => {
+        const role = messageObject.sender === 'ChatGPT' ? 'assistant' : 'user';
+        return { role, content: messageObject.message };
+      }),
+      { role: 'user', content: userMessage },
+    ];
+  
+    const apiRequestBody = {
+      model: 'gpt-3.5-turbo',
+      messages: apiMessages,
+    };
+  
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + API_KEY,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(apiRequestBody),
     });
+  
+    if (!response.ok) {
+      throw new Error('Failed to fetch response from OpenAI.');
+    }
+  
+    const data = await response.json();
+    return data.choices[0].message.content;
   }
-
+  
   return (
     <div className="gpt h-full">
-      <div className='h-full w-full bg-slate-200'>
+      <div className="h-full w-full bg-slate-200">
         <MainContainer>
-          <ChatContainer>       
-            <MessageList 
-              scrollBehavior="smooth" 
-              typingIndicator={isTyping ? <TypingIndicator content="ChatGPT is typing" /> : null}
+          <ChatContainer>
+            <MessageList
+              scrollBehavior="smooth"
+              typingIndicator={isTyping ? <TypingIndicator content="typing" /> : null}
             >
               {messages.map((message, i) => {
-                return <Message key={i} model={message} />
+                return <Message key={i} model={message} />;
               })}
             </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />        
+            <MessageInput placeholder="Type message here" onSend={handleSend} />
           </ChatContainer>
         </MainContainer>
       </div>
     </div>
-  )
+  );
 }
 
-export default HomePage(GptChat)
+export default HomePage(GptChat);
