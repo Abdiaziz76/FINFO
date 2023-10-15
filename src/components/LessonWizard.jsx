@@ -1,46 +1,10 @@
 import React from 'react';
 import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { FaPlus, FaTimes } from 'react-icons/fa';
+import Button from './Button.jsx';
+import InputField from './InputField.jsx';
 
-const InputField = ({
-  type,
-  id,
-  value,
-  onChange,
-  placeholder,
-  darkMode,
-  className,
-}) => (
-  <>
- {type === "textarea" ? 
- <textarea
-    type={type}
-    id={id}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className={`dark:bg-gray-700 p-5 rounded-md outline-blue-500 border border-grey-200 bg-slate-300 placeholder-slate-500 dark:placeholder-slate-400 text-black dark:text-white font-semibold ${className} w-full`}
-  /> : (
-    <input
-    type={type}
-    id={id}
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    className={`dark:bg-gray-700 p-5 rounded-md outline-blue-500 border border-grey-200 bg-slate-300 placeholder-slate-500 dark:placeholder-slate-400 text-black dark:text-white font-semibold ${className} w-full`}
-  />
-  )}
-  </>
-);
 
-const Button = ({ onClick, label, icon, darkMode, className }) => (
-  <button
-    onClick={onClick}
-    className={`flex ${label === 'Next' ? ' flex-row-reverse' : ''} ${label === 'Remove' ? 'text-red-700 text-xl p-0 self-center' : 'p-2  sm:px-4 sm:py-2 dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500'} gap-3 items-center   self-end rounded-md text-white font-semibold ${className}`}
-  >
-    {icon} {label === 'Remove' ? '': label} 
-  </button>
-);
 
 const LessonTitleStep = ({ lessonData, setLessonData, onNext }) => (
   <div className='p-4 flex flex-col justify-start gap-4 h-full'>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaMoneyBill, FaShieldAlt, FaChartBar, FaArrowLeft } from 'react-icons/fa';
 import HomePage from '../../layouts/HomePage';
-import CreateLessonWizard from './LessonWizard.jsx';
+import CreateLessonWizard from './CreateLessonWizard.jsx';
 
 const userCountry = "Kenya";
 

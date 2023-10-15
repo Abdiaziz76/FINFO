@@ -77,7 +77,7 @@ const path = location.pathname.slice(1);
         {/* Sidebar */}
         <div className="hidden md:flex flex-col md:w-48 h-full fixed">
             <div className="flex items-center border-y dark:border-slate-600 p-2 mb-4">
-                <Link to={'/'} className="text-blue-600 font-medium">FINFO</Link>
+                <Link to={'/'} className="text-blue-600 dark:text-blue-400 font-medium">FINFO</Link>
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
@@ -114,9 +114,9 @@ const path = location.pathname.slice(1);
                     <span className="hidden md:flex text-slate-600 dark:text-white font-medium">{auth?.username}</span>
                     <span className=""><img src={profile} alt="" className="object-cover h-8 w-8 rounded-full overflow-hidden border" /></span>
                     { showMobileMenu ?
-                        <span className="flex md:hidden text-slate-600 text-2xl" onClick={() => setShowMobileMenu(false)}><AiOutlineClose /></span>
+                        <span className="flex md:hidden text-slate-600 dark:text-blue-400 text-2xl" onClick={() => setShowMobileMenu(false)}><AiOutlineClose /></span>
                         :
-                        <span className="flex md:hidden text-slate-600 text-2xl" onClick={() => setShowMobileMenu(true)}><FaBars /></span>
+                        <span className="flex md:hidden text-slate-600 dark:text-blue-400 text-2xl" onClick={() => setShowMobileMenu(true)}><FaBars /></span>
                     }
                 </div>
             </div>

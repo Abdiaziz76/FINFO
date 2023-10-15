@@ -4,7 +4,7 @@ import {
   LessonDescriptionStep,
   LessonQuestionsStep,
   LessonConfirmationStep
-} from '../../components/Wizard.jsx'
+} from '../../components/LessonWizard.jsx'
 
 const CreateLessonWizard = () => {
   const [lessonData, setLessonData] = useState({

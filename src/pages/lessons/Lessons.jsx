@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import LessonsCatalogue from './LessonsCatalogue';
-import CreateLessonWizard from './LessonWizard';
+import CreateLessonWizard from './CreateLessonWizard';
 import HomePage from '../../layouts/HomePage';
-import { Button } from '../../components/Wizard.jsx';
+import Button from '../../components/Button';
 import { FaPlus } from 'react-icons/fa';
 import { FaBookOpen } from 'react-icons/fa6';
 
