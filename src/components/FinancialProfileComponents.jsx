@@ -87,7 +87,7 @@ const FinancialGoals = ({ financialData, setFinancialData, onPrev, onNext }) => 
   };
 
   return (
-    <div className='p-4 flex flex-col justify-start gap-4'>
+    <div className='p-4 flex flex-col justify-start  gap-4'>
       <label htmlFor="goals" className="dark:text-white self-start font-semibold text-md">
         Financial Goals:
       </label>
