@@ -102,7 +102,7 @@ const LessonConfirmationStep = ({ lessonData, onPrev, onSubmit }) => (
         <span className='font-semibold'>Lesson Description : </span> {lessonData.description}
       </p>
       <p className='text-md text-start flex flex-col'>
-        <span className='font-semibold'>Lesson Questions : </span> {lessonData.questions.map((question) => <span className='ml-2'>{question.question}</span>)}
+        <span className='font-semibold'>Lesson Questions : </span> {lessonData.questions.map((question) => <span key={question.question} className='ml-2'>{question.question}</span>)}
       </p>
     </div>
     <div className='flex gap-3 self-end'>

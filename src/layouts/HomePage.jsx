@@ -14,6 +14,7 @@ import { useLocation } from 'react-router-dom'
 import useAuth from '../hooks/useAuth'
 import {IoMdLogOut} from 'react-icons/io'
 import { toast, ToastContainer } from 'react-toastify';
+import { BsCash } from 'react-icons/bs'
 
 
 
@@ -75,9 +76,9 @@ const path = location.pathname.slice(1);
     <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800 bg-slate-100">
         <ToastContainer />
         {/* Sidebar */}
-        <div className="hidden md:flex flex-col md:w-48 h-full fixed">
+        <div className="hidden md:flex flex-col md:w-48 h-full fixed dark:bg-slate-800 bg-blue-100">
             <div className="flex items-center border-y dark:border-slate-600 p-2 mb-4">
-                <Link to={'/'} className="text-blue-600 dark:text-blue-400 font-medium">FINFO</Link>
+                <Link to={'/'} className="text-blue-600 dark:text-blue-400 font-bold justify-center px-5 w-full text-2xl flex gap-2 items-center text-center"><BsCash />FININFO</Link>
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
