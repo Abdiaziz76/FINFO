@@ -12,13 +12,14 @@ const LessonTitleStep = ({ lessonData, setLessonData, onNext }) => (
       Lesson Title:
     </label>
     <InputField
+      required 
       type="text"
       id="title"
       value={lessonData.title}
       onChange={(e) => setLessonData({ ...lessonData, title: e.target.value })}
       placeholder='lesson title here'
     />
-    <Button onClick={onNext} label="Next" icon={<FaArrowRight />} />
+    <Button disabled onClick={onNext} label="Next" icon={<FaArrowRight />}  />
   </div>
 );
 
