@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaMoneyBill, FaShieldAlt, FaChartBar, FaArrowLeft } from 'react-icons/fa';
-import HomePage from '../layouts/HomePage';
+import HomePage from '../../layouts/HomePage';
+import CreateLessonWizard from './LessonWizard.jsx';
 
 const userCountry = "Kenya";
 
@@ -97,7 +98,7 @@ const LessonsCatalog = () => {
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
           <span
             onClick={handleBackToCatalog}
-            className="cursor-pointer text-blue-400 hover:text-blue-600 text-xl mr-2"
+            className="cursor-pointer text-blue-600 hover:text-blue-600 text-xl mr-2"
           >
             <FaArrowLeft />
           </span>
@@ -115,9 +116,9 @@ const LessonsCatalog = () => {
             {lessonsData.map((lesson, index) => (
               <div
                 key={index}
-                className="bg-slate-200 flex flex-col justify-between dark:bg-slate-600 p-4 rounded-lg shadow-md transition duration-500"
+                className="bg-slate-300 flex flex-col justify-between dark:bg-slate-600 p-4 rounded-lg shadow-md transition duration-500"
               >
-                <span className="self-center flex items-center justify-center text-5xl text-blue-400">
+                <span className="self-center flex items-center justify-center text-5xl text-blue-600 dark:text-blue-300">
                   {lesson.icon}{' '}
                 </span>
                 <h2 className="text-xl font-semibold mb-2 dark:text-white">
@@ -128,150 +129,19 @@ const LessonsCatalog = () => {
                 </p>
                 <button
                   onClick={() => handleLessonClick(index)}
-                  className="text-blue-500 hover:underline dark:text-blue-400 "
+                  className="text-blue-600 hover:underline dark:text-blue-400 "
                 >
                   Learn More
                 </button>
               </div>
             ))}
           </div>
-          <CreateLessonWizard />
+          {/* <CreateLessonWizard /> */}
         </div>
       )}
     </div>
   );
 };
 
-export default HomePage(LessonsCatalog);
+export default LessonsCatalog;
 
-
-const CreateLessonWizard = () => {
-  const [lessonData, setLessonData] = useState({
-    title: '',
-    description: '',
-    tags: [],
-    hasQuestions: false,
-    questions: [],
-  });
-
-  const [currentStep, setCurrentStep] = useState(1);
-
-  const handleNext = () => {
-    setCurrentStep(currentStep + 1);
-  };
-
-  const handlePrev = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  const handleSubmit = () => {
-    // Send the lessonData to your backend for lesson creation.
-    // Implement the logic for creating a lesson.
-  };
-
-  const renderStepContent = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <div>
-            <label htmlFor="title" className="dark:text-white">
-              Lesson Title:
-            </label>
-            <input
-              type="text"
-              id="title"
-              value={lessonData.title}
-              onChange={(e) => setLessonData({ ...lessonData, title: e.target.value })}
-              className="dark:bg-gray-700"
-            />
-            <button onClick={handleNext} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Next
-            </button>
-          </div>
-        );
-
-      case 2:
-        return (
-          <div>
-            <label htmlFor="description" className="dark:text-white">
-              Lesson Description:
-            </label>
-            <textarea
-              id="description"
-              value={lessonData.description}
-              onChange={(e) => setLessonData({ ...lessonData, description: e.target.value })}
-              className="dark:bg-gray-700"
-            />
-            <button onClick={handlePrev} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Previous
-            </button>
-            <button onClick={handleNext} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Next
-            </button>
-          </div>
-        );
-
-      case 3:
-        return (
-          <div>
-            <label className="dark:text-white">
-              Does this lesson include questions?
-            </label>
-            <div>
-              <input
-                type="radio"
-                id="hasQuestionsYes"
-                name="hasQuestions"
-                value="yes"
-                checked={lessonData.hasQuestions}
-                onChange={() => setLessonData({ ...lessonData, hasQuestions: true })}
-              />
-              <label htmlFor="hasQuestionsYes" className="dark:text-white">Yes</label>
-            </div>
-            <div>
-              <input
-                type="radio"
-                id="hasQuestionsNo"
-                name="hasQuestions"
-                value="no"
-                checked={!lessonData.hasQuestions}
-                onChange={() => setLessonData({ ...lessonData, hasQuestions: false })}
-              />
-              <label htmlFor="hasQuestionsNo" className="dark:text-white">No</label>
-            </div>
-            <button onClick={handlePrev} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Previous
-            </button>
-            <button onClick={handleNext} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Next
-            </button>
-          </div>
-        );
-
-      case 4:
-        return (
-          <div>
-            {/* Include questions input fields here if hasQuestions is true */}
-            <button onClick={handlePrev} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Previous
-            </button>
-            <button onClick={handleSubmit} className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white">
-              Create Lesson
-            </button>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  return (
-    <div className="dark:bg-gray-800 dark:text-white p-4 rounded-lg shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4">Create a New Lesson</h2>
-      {renderStepContent()}
-    </div>
-  );
-};
-
-// export default CreateLessonWizard;

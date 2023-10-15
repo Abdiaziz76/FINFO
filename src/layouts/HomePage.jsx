@@ -72,7 +72,7 @@ const path = location.pathname.slice(1);
         window.location.reload();
       };
   return (
-    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800 bg-slate-200">
+    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800 bg-slate-100">
         <ToastContainer />
         {/* Sidebar */}
         <div className="hidden md:flex flex-col md:w-48 h-full fixed">
@@ -108,7 +108,7 @@ const path = location.pathname.slice(1);
         {/* Main Page */}
         <div className="flex flex-col border dark:border-slate-600 w-full md:ml-48">
             {/* Header */}
-            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-slate-200 dark:bg-slate-800 w-full">
+            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 w-full">
                 <div className="flex gap-2 items-center">
                     <DarkModeSwitcher />
                     <span className="hidden md:flex text-slate-600 dark:text-white font-medium">{auth?.username}</span>
