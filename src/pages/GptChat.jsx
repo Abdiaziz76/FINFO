@@ -1,8 +1,9 @@
-import { useState } from 'react'
-import '@chatscope/chat-ui-kit-styles/dist/default/styles.min.css';
-import { MainContainer, ChatContainer, MessageList, Message, MessageInput, TypingIndicator } from '@chatscope/chat-ui-kit-react';
+import React, { useState, useRef, useEffect } from 'react';
 import HomePage from '../layouts/HomePage';
 import { useChat } from '../context/chatContext';
+import { IoSend } from 'react-icons/io5';
+import { profile } from '../assets/images';
+import { bot } from '../assets/images';
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -10,42 +11,58 @@ const userCountry = "Kenya";
 const systemMessage = {
   role: "system",
   content: `
-    Welcome to the Financial Advisor Chatbot!
-    
-    Your mission is to provide expert financial advice and educate users on various financial topics. You should explain complex financial concepts in a simple and understandable way, just like you're talking to someone new to finance.
+  Welcome to the Financial Advisor Chatbot!
+  
+  Your mission is to provide expert financial advice and educate users on various financial topics. You should explain complex financial concepts in a simple and understandable way, just like you're talking to someone new to finance.
 
-    You can assist with:
-    - Budgeting and financial planning
-    - Investment strategies
-    - Debt management
-    - Fraud prevention and financial security
-    
-    If a question falls outside the financial domain, kindly guide the user to ask relevant financial questions.
+  You can assist with:
+  - Budgeting and financial planning
+  - Investment strategies
+  - Debt management
+  - Fraud prevention and financial security
+  
+  If a question falls outside the financial domain, kindly guide the user to ask relevant financial questions.
 
-    Please provide detailed explanations and recommendations of financial institutions in ${userCountry}. Compare the different institutions and their services, and recommend the best one for the user's needs. tailoer the response to the user's country which is ${userCountry}.
-  `,
+  Please provide detailed explanations and recommendations of financial institutions in ${userCountry}. Compare the different institutions and their services, and recommend the best one for the user's needs. tailor the response to the user's country, which is ${userCountry}.
+
+  Provide clear HTML tagged headings, use paragraphs, lists, spacing, new lines where necessary i.e in lists, and formatting for better readability. Return rich text with HTML tags so that it is displayed properly to the user. Strictly return HTML5 formatted text which contains only the body tag. You can add Tailwind styles to the HTML tags to make the content more readable.
+`,
 };
 
 function GptChat() {
-  const { messages, addMessage } = useChat(); // Use the chat context
+  const { messages, addMessage } = useChat();
   const [isTyping, setIsTyping] = useState(false);
+  const [inputMessage, setInputMessage] = useState("");
+  const messageEndRef = useRef(null);
 
-  const handleSend = async (message) => {
-    console.log('users message', message)
+  
+
+  useEffect(() => {
+    // Scroll to the latest message when new messages arrive
+    messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
+  const handleSend = async (e) => {
+    e.preventDefault();
+    const message = inputMessage.trim();
+    if (message === "") return;
+
+    setInputMessage(""); // Clear the input field
+
     const userMessage = {
       message,
       direction: 'outgoing',
       sender: 'user',
     };
-  
+
     // Display the user's message immediately
     addMessage(userMessage);
-  
+
     setIsTyping(true);
-  
+
     try {
       const chatGptResponse = await processMessageToChatGPT(message);
-  
+
       // Display ChatGPT's response
       addMessage({
         message: chatGptResponse,
@@ -58,7 +75,7 @@ function GptChat() {
       setIsTyping(false);
     }
   };
-  
+
   async function processMessageToChatGPT(userMessage) {
     const apiMessages = [
       systemMessage,
@@ -68,12 +85,12 @@ function GptChat() {
       }),
       { role: 'user', content: userMessage },
     ];
-  
+
     const apiRequestBody = {
       model: 'gpt-3.5-turbo',
       messages: apiMessages,
     };
-  
+
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -82,31 +99,64 @@ function GptChat() {
       },
       body: JSON.stringify(apiRequestBody),
     });
-  
+
     if (!response.ok) {
       throw new Error('Failed to fetch response from OpenAI.');
     }
-  
+
     const data = await response.json();
     return data.choices[0].message.content;
   }
-  
+
   return (
     <div className="gpt h-full">
-      <div className="h-full w-full bg-slate-200">
-        <MainContainer>
-          <ChatContainer>
-            <MessageList
-              scrollBehavior="smooth"
-              typingIndicator={isTyping ? <TypingIndicator content="typing" /> : null}
-            >
-              {messages.map((message, i) => {
-                return <Message key={i} model={message} />;
-              })}
-            </MessageList>
-            <MessageInput placeholder="Type message here" onSend={handleSend} />
-          </ChatContainer>
-        </MainContainer>
+      <div className="h-full w-full bg-slate-100 dark:bg-slate-800">
+        <div className="chat-container flex flex-col justify-between h-full py-2">
+          <div className="message-list flex flex-col" >
+            {messages.map((message, i) => (
+              <div
+                key={i}
+                className={`flex ${message.direction === 'incoming' ? 'self-start rounded-r-md text-start' : 'flex-row-reverse self-end rounded-l-md'
+                }`}
+              >
+                <span className="">
+                  <img src={message.direction === 'incoming' ? bot : profile} alt="" className="object-cover h-8 w-8 rounded-full overflow-hidden border" />
+                </span>
+                <div
+                  className={`message m-1 p-3 flex flex-row gap-1 ${
+                    message.direction === 'incoming' ? 'incoming' : 'outgoing'
+                  } ${message.direction === 'incoming' ? 'bg-blue-300 self-start w-full sm:w-3/4 rounded-r-2xl rounded-bl-2xl text-start' : 'bg-blue-200 self-end rounded-l-2xl rounded-br-2xl'
+                  } `}
+                >
+                  
+                  <div dangerouslySetInnerHTML={{ __html: message.message }} />
+                </div>
+              </div>
+            ))}
+
+            <div ref={messageEndRef} />
+          </div>
+          <>
+            {isTyping ? <p className='text-blue-400 self-start animate-pulse rounded-md text-6xl font-semibold text-center mt-auto'>...</p> : ''}
+            <div className="sticky bottom-10 w-full sm:3/4 self-center flex items-center justify-center">
+              <div className="message-input  w-full sm:w-3/4 self-center mt-10  bottom-0 relative">
+                <form onSubmit={handleSend}>
+                  <input
+                    type="text"
+                    disabled={isTyping}
+                    placeholder="Type message here"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    className='w-full p-4 rounded-md bg-slate-300 placeholder-slate-500 font-semibold'
+                  />
+                  <button type='submit' className='absolute right-4 top-4  z-10' onClick={handleSend}>
+                    <IoSend className='text-blue-400 text-xl ' />
+                  </button>
+                </form>
+              </div>
+            </div>
+          </>
+        </div>
       </div>
     </div>
   );

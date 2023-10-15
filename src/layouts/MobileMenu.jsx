@@ -8,7 +8,7 @@ const MobileMenu = ({ show, setShow, menuItems, setActiveMenu, activeMenu }) => 
 
     return (
         <div className={`absolute top-0 ${show && isMobile ? 'left-0' : '-left-full' } flex flex-col gap-2 border px-4 z-10
-            bg-white h-full max-w-3/4 w-full`}>
+            bg-white dark:bg-slate-800 h-full max-w-3/4 w-full`}>
             <div className="flex items-center border-y p-2 mb-4 relative">
                 <span className="text-blue-600 font-medium">FININFO</span>
                 <span className="absolute right-2 text-slate-700 transition-colors hover:text-blue-600"

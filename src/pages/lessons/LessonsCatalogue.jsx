@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FaMoneyBill, FaShieldAlt, FaChartBar, FaArrowLeft } from 'react-icons/fa';
-import HomePage from '../layouts/HomePage';
+import HomePage from '../../layouts/HomePage';
+import CreateLessonWizard from './CreateLessonWizard.jsx';
 
 const userCountry = "Kenya";
 
@@ -97,7 +98,7 @@ const LessonsCatalog = () => {
         <div className="bg-slate-100 dark:bg-slate-600 p-4 rounded-lg shadow-sm transition duration-500">
           <span
             onClick={handleBackToCatalog}
-            className="cursor-pointer text-blue-400 hover:text-blue-600 text-xl mr-2"
+            className="cursor-pointer text-blue-600 hover:text-blue-600 text-xl mr-2"
           >
             <FaArrowLeft />
           </span>
@@ -115,9 +116,9 @@ const LessonsCatalog = () => {
             {lessonsData.map((lesson, index) => (
               <div
                 key={index}
-                className="bg-slate-200 flex flex-col justify-between dark:bg-slate-600 p-4 rounded-lg shadow-md transition duration-500"
+                className="bg-slate-300 flex flex-col justify-between dark:bg-slate-600 p-4 rounded-lg shadow-md transition duration-500"
               >
-                <span className="self-center flex items-center justify-center text-5xl text-blue-400">
+                <span className="self-center flex items-center justify-center text-5xl text-blue-600 dark:text-blue-300">
                   {lesson.icon}{' '}
                 </span>
                 <h2 className="text-xl font-semibold mb-2 dark:text-white">
@@ -128,17 +129,19 @@ const LessonsCatalog = () => {
                 </p>
                 <button
                   onClick={() => handleLessonClick(index)}
-                  className="text-blue-500 hover:underline dark:text-blue-400 "
+                  className="text-blue-600 hover:underline dark:text-blue-400 "
                 >
                   Learn More
                 </button>
               </div>
             ))}
           </div>
+          {/* <CreateLessonWizard /> */}
         </div>
       )}
     </div>
   );
 };
 
-export default HomePage(LessonsCatalog);
+export default LessonsCatalog;
+

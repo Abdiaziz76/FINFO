@@ -118,10 +118,13 @@ const Signup = () => {
 
         {/* Map over the formInputs array to render input fields */}
         {formInputs.map((input, index) => (
-          <div key={index} className="mb-4 relative">
+          <div key={index} className="mb-1 relative flex flex-col">
+            <label className='w-full text-start text-slate-500 font-normal text-sm' htmlFor={input.name}>{input.name}</label>
+
             <input
               type={input.type}
               name={input.name}
+              id={input.name}
               value={input.value}
               onChange={handleChange}
               placeholder={input.placeholder}
@@ -132,7 +135,7 @@ const Signup = () => {
               <button
                 type="button"
                 onClick={input.toggleVisibility}
-                className="absolute inset-y-0 right-0 flex items-center px-2"
+                className="absolute inset-y-0 right-0 top-5 flex items-center px-2"
               >
                 {input.icon}
               </button>
