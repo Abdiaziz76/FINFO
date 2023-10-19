@@ -138,8 +138,8 @@ function GptChat() {
           </div>
           <>
             {isTyping ? <p className='text-blue-400 self-start animate-pulse rounded-md text-6xl font-semibold text-center mt-auto'>...</p> : ''}
-            <div className="sticky bottom-10 w-full sm:3/4 self-center flex items-center justify-center">
-              <div className="message-input  w-full sm:w-3/4 self-center mt-10  bottom-0 relative">
+            <div className="sticky bottom-1 w-full sm:3/4 self-center flex items-center justify-center ">
+              <div className="message-input  w-full sm:w-3/4 self-center mt-10  bottom-0 relative ">
                 <form onSubmit={handleSend}>
                   <input
                     type="text"
