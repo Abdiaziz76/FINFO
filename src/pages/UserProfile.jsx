@@ -58,10 +58,10 @@ const UserProfile = () => {
             )}
           </div>
           {/* logout action */}
-          <div className="flex w-full mt-8">
+          {/* <div className="flex w-full mt-8">
             <span className="flex items-center gap-2 hover:text-blue-800 cursor-pointer"><BiLogOut/> Logout</span>
-          </div>
-        <FinancialProfileWizard />
+          </div> */}
+        {/* <FinancialProfileWizard /> */}
 
         </div>
         {/* <FinancialProfileWizard /> */}
