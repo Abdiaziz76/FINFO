@@ -8,13 +8,14 @@ import HomePage from "./layouts/HomePage";
 import { AuthProvider } from "./context/AuthProvider";
 import AiChat from "./pages/AiChat";
 import Recommendations from "./pages/Recommendations";
-import LessonsCatalog from "./pages/Lessons";
+import LessonsCatalog from "./pages/lessons/LessonsCatalogue";
 import UserProfile from "./pages/UserProfile";
 import History from "./pages/History";
 import PersistLogin from "./pages/Authentication/PersistLogin"
 import RequireAuth from "./pages/Authentication/RequireAuth"
 import { BrowserRouter as Router } from 'react-router-dom'
 import GptChat from "./pages/GptChat";
+import Lessons from "./pages/lessons/Lessons";
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
        
         <Route path="/chat" element={<AiChat />}></Route>
         <Route path="/recommendations" element={<Recommendations />}></Route>
-        <Route path="/lessons" element={<LessonsCatalog />}></Route>
+        <Route path="/lessons" element={<Lessons/>}></Route>
         <Route path="/profile" element={<UserProfile />}></Route>
         <Route path="/history" element={<History />}></Route>
         <Route path="/gptchat" element={<GptChat />}></Route>
