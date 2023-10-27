@@ -1,66 +1,54 @@
-// import React from "react";
+import React from "react";
 import DarkModeSwitcher from "../components/DarkModeSwitch";
 import { Link } from "react-router-dom";
+import {HeroImage} from "../assets/images"; // Import a futuristic hero image
 
 const LandingPage = () => {
-
   const services = [
-    ['financial advice', 'Not sure where to start on a particular financial issue? Make use of our service, especially the chat feature to get a good grasp of what the challenge is and what options you could explore'],
-    ['recommendations', 'Get recommendations tailored to you based on your needs as informed by your interaction with our services. Ask for recommendations and comparison between different services and even institutions to make informed decisions'],
-    ['financial education', 'Looking to educate yourself on financial and financial institution matters? Look no more, we are here to provide you with tailored educational resources'],
-    ['just chat', 'Have no idea where to begin? Just chat and figure it out along the way...'],
-  ]
-  return (
-    <div className="dark:bg-slate-800 dark:text-white  w-full">
-      {/* Navbar */}
-      <nav className="bg-blue-500 dark:bg-black py-4 px-2">
-        <div className="container mx-auto">
-          <div className="flex justify-between items-center">
-            <div className="text-white font-bold text-2xl">FININFO</div>
-            <div className="flex items-center justify-between gap-4">
-              <DarkModeSwitcher />
-              <ul className="hidden md:flex space-x-6">
-                {" "}
-                {/* Hide on screens smaller than medium (md) */}
+    ['Financial Advice', 'Get expert financial advice to make informed decisions.'],
+    ['Personalized Recommendations', 'Receive tailored recommendations based on your financial needs.'],
+    ['Financial Education', 'Access educational resources for financial empowerment.'],
+    ['Live Chat Support', 'Chat with our experts to navigate your financial challenges.'],
+  ];
 
-                <li className="text-white hover:text-gray-300 cursor-pointer">
-                  Home
-                </li>
-                <li className="text-white hover:text-gray-300 cursor-pointer">
-                  About
-                </li>
-                <li className="text-white hover:text-gray-300 cursor-pointer">
-                  Services
-                </li>
-                <li className="text-white hover:text-gray-300 cursor-pointer">
-                  Contact
-                </li>
-                
-              </ul>
-              <div className="flex items-center gap-2">
-                  <button className="text-white    dark:bg-blue-500 hover:text-blue-200 border border-black dark:border-white bg-black  p-1">
-                    <Link to="/signup">Sign Up</Link>
-                  </button>
-                  <button className="text-white dark:hover:text-blue-300 p-1 border ">
-                    <Link to="/signin">Sign In</Link>
-                  </button>
-                </div>
+  return (
+    <div className="dark:bg-slate-800 dark:text-white w-full">
+      {/* Navbar */}
+      <nav className="bg-blue-500 dark:bg-black py-4 px-2 fixed z-20 w-full opacity-90">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="text-white font-bold text-2xl">FININFO</div>
+          <div className="flex items-center gap-4">
+            <DarkModeSwitcher />
+            <ul className="hidden md:flex space-x-6">
+              <li className="text-white hover:text-gray-300 cursor-pointer">Home</li>
+              <li className="text-white hover:text-gray-300 cursor-pointer">About</li>
+              <li className="text-white hover:text-gray-300 cursor-pointer">Services</li>
+              <li className="text-white hover:text-gray-300 cursor-pointer">Contact</li>
+            </ul>
+            <div className="flex items-center gap-2">
+              <button className="text-white dark:bg-blue-500 hover:text-blue-200 border border-black dark:border-white bg-black p-1">
+                <Link to="/signup">Sign Up</Link>
+              </button>
+              <button className="text-white dark:hover:text-blue-300 p-1 border">
+                <Link to="/signin">Sign In</Link>
+              </button>
             </div>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <section className="bg-gray-100 dark:bg-slate-600 py-16">
-        <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
+      <section className="bg-black relative py-16 h-screen">
+        <img src={HeroImage} alt="Hero" className="absolute inset-0 object-cover w-full h-full opacity-30" />
+        <div className="container flex flex-col justify-center items-center mx-auto text-center relative z-10 h-full">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
             Your Trusted Financial Advisor
           </h1>
-          <p className="text-gray-600 dark:text-slate-200 mb-6">
+          <p className="text-gray-200 text-whit mb-6">
             Get personalized financial advice and make informed decisions.
           </p>
-          <Link to='/signup'>
-            <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded">
+          <Link to="/signup">
+            <button className="bg-white hover:bg-gray-200 text-blue-500 font-semibold py-2 px-4 rounded-full transition-all duration-300">
               Get Started
             </button>
           </Link>
@@ -73,31 +61,28 @@ const LandingPage = () => {
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-start md:text-center">
             About Us
           </h2>
-          <p className="text-gray-600 dark:text-slate-200 mb-6 text-start md:text-center">         
-            FINFO is an all matters finance platform. Whether you are looking for advice on choosing a banking partner, where to get a particular service or what service best fits your needs, FINFO is here to help. In just a matter of seconds, you can get all the information you need to make the right (informed) decision.
+          <p className="text-gray-600 dark:text-slate-200 mb-6 text-start md:text-center">
+            FINFO is your trusted financial companion. We provide expert advice and personalized recommendations to help you make informed decisions.
           </p>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="bg-gray-100 dark:bg-slate-600 py-16 px-8 md:px-16">
+      <section className="bg-blue-500 dark:bg-black py-16 px-8 md:px-16">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-start md:text-center">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 text-start md:text-center text-white">
             Our Services
           </h2>
-          <p className="text-gray-600 dark:text-slate-200 mb-6 text-start md:text-center">
+          <p className="text-gray-200 text-start md:text-center">
             With you at every financial step you want to take
           </p>
-          <div className="flex justify-between gap-8 items-center flex-wrap md:border dark:border-slate-400 py-8 px-8 md:px-16">
-            {/* service */}
-            {
-              services?.map(([name, description]) =>
-              <div key={name} className="flex flex-col gap-2 md:max-w-[400px] w-full">
-                <span className="font-medium text-2xl text-start md:text-center capitalize">{name}</span>
-                <span className="text-start md:text-center">{description}</span>
+          <div className="flex justify-between gap-8 items-center flex-wrap dark:border-white py-8 px-8 md:px-16">
+            {services.map(([name, description]) => (
+              <div key={name} className="max-w-md w-full text-white">
+                <h3 className="font-medium text-2xl text-start md:text-center capitalize">{name}</h3>
+                <p className="text-start md:text-center">{description}</p>
               </div>
-              )
-            }
+            ))}
           </div>
         </div>
       </section>
@@ -105,34 +90,34 @@ const LandingPage = () => {
       {/* Contact Section */}
       <section className="py-16 md:px-16 px-8">
         <div className="container mx-auto">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold mb-4 dark:text-white">
             Contact Us
           </h2>
-          <p className="text-gray-600 dark:text-slate-200 mb-6">
+          <p className="dark:text-white my-2">
             Have questions? We're here to help. Contact our team anytime.
           </p>
           {/* Contact us form */}
           <div className="flex justify-center items-center">
-            <form onSubmit={() => {}} className="w-80 p-6 rounded-lg border dark:border-slate-600">
+            <form onSubmit={() => {}} className="w-80 p-6 rounded-lg border dark:border-white">
               <div className="mb-4">
                 <input
                   type="email"
                   name="email"
-                  value=''
+                  value=""
                   onChange={() => {}}
                   placeholder="Email"
-                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-slate-600 rounded focus:outline-none"
+                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-white rounded focus:outline-none"
                   required
                 />
               </div>
               <div className="mb-4 relative">
                 <textarea
-                  type='text'
+                  type="text"
                   name="message"
-                  value=''
+                  value=""
                   onChange={() => {}}
                   placeholder="Message"
-                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-slate-600 rounded pr-10 focus:outline-none"
+                  className="w-full px-4 py-2 border dark:bg-transparent dark:border-white rounded pr-10 focus:outline-none"
                   required
                 />
               </div>
@@ -149,7 +134,7 @@ const LandingPage = () => {
       {/* Footer */}
       <footer className="bg-blue-500 dark:bg-black py-4">
         <div className="container mx-auto text-center text-white">
-          &copy; 2023 FININFO
+          &copy; {new Date().getFullYear()} FININFO
         </div>
       </footer>
     </div>
