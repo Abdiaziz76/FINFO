@@ -168,6 +168,7 @@ function GptChat() {
           </>
         </div>
         <div className="hidden md:flex flex-col gap-2 border-l border-slate-600 w-[250px] pl-2 text-start">
+          {/* NOTE/REMEMBER: HistoryItem should set the current chat conversation to that particular history's... */}
           {history?.map(item => <HistoryItem key={item} item={item} />)}
         </div>
       </div>

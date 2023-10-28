@@ -1,5 +1,4 @@
 // import React from 'react'
-// import { profile } from '../assets/images'
 
 const HistoryItem = ({ item }) => {
     // console.log({ item })
