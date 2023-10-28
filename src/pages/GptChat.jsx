@@ -5,6 +5,8 @@ import { IoSend } from 'react-icons/io5';
 import { profile } from '../assets/images';
 import { bot } from '../assets/images';
 
+import HistoryItem from '../components/HistoryItem';
+
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
 const userCountry = "Kenya";
@@ -34,6 +36,9 @@ function GptChat() {
   const [isTyping, setIsTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const messageEndRef = useRef(null);
+
+  // temporary - I should use messages here
+  const history = ['temp']
 
   
 
@@ -110,8 +115,8 @@ function GptChat() {
 
   return (
     <div className="gpt h-full">
-      <div className="h-full w-full bg-slate-100 dark:bg-slate-800">
-        <div className="chat-container flex flex-col justify-between h-full py-2">
+      <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex">
+        <div className="chat-container flex flex-col justify-between h-full py-2 flex-1">
           <div className="message-list flex flex-col" >
             {messages.map((message, i) => (
               <div
@@ -156,6 +161,9 @@ function GptChat() {
               </div>
             </div>
           </>
+        </div>
+        <div className="hidden md:flex flex-col gap-2 border-l border-slate-600 w-[250px] pl-2 text-start">
+          {history?.map(item => <HistoryItem key={item} item={item} />)}
         </div>
       </div>
     </div>
