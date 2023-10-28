@@ -6,6 +6,7 @@ import { profile } from '../assets/images';
 import { bot } from '../assets/images';
 
 import HistoryItem from '../components/HistoryItem';
+import MobileHistory from '../components/MobileHistory';
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -39,6 +40,7 @@ function GptChat() {
 
   // temporary - I should use messages here
   const history = ['temp']
+  const [showHistory, setShowHistory] = useState(false)
 
   
 
@@ -114,10 +116,13 @@ function GptChat() {
   }
 
   return (
-    <div className="gpt h-full">
+    <div className="gpt h-full relative">
       <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex">
         <div className="chat-container flex flex-col justify-between h-full py-2 flex-1">
           <div className="message-list flex flex-col" >
+            <div className="flex md:hidden dark:text-blue-400 items-center justify-end py-2 mb-4">
+              <span className="hover:underline cursor-pointer" onClick={() => setShowHistory(true)}>See history</span>
+            </div>
             {messages.map((message, i) => (
               <div
                 key={i}
@@ -166,6 +171,7 @@ function GptChat() {
           {history?.map(item => <HistoryItem key={item} item={item} />)}
         </div>
       </div>
+      {showHistory && <MobileHistory setShowHistory={setShowHistory} history={history} />}
     </div>
   );
 }
