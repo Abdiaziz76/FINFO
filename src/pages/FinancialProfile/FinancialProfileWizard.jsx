@@ -8,8 +8,12 @@ import {
 } from "../../components/FinancialProfileComponents.jsx";
 import Button from "../../components/Button.jsx";
 import { FaArrowLeft } from "react-icons/fa";
+import useAuth from "../../hooks/useAuth.js";
 
-const FinancialProfileWizard = () => {
+const FinancialProfileWizard = ({ onProfile }) => {
+  const {auth} = useAuth()
+  const uid = auth.user_id
+
   const [financialData, setFinancialData] = useState({
     income: [{ income: "" }],
     expenses: [{ expenses: "" }],
@@ -17,8 +21,8 @@ const FinancialProfileWizard = () => {
     goals: [{ goals: "" }],
   });
 
-  console.log('financialData', financialData)
-console.log('financialData', financialData)
+  // console.log("financialData", financialData);
+  // console.log("financialData", financialData);
   const [currentStep, setCurrentStep] = useState(1);
 
   const handleNext = () => {
@@ -29,8 +33,23 @@ console.log('financialData', financialData)
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = () => {
+  const handleSubmitFinancialProfile = () => {
     // Process or submit the financial data as needed
+    console.log("financialData", financialData);
+    // destructuring the financialData object
+    const { income, expenses, savings, goals } = financialData;
+    console.log("income", income, "/n expenses", expenses, "savings", savings, "goals", goals);
+  //  const incomeUrl = "http://localhost:5000/api/v1/financial/income"
+  //   const expensesUrl = "http://localhost:5000/api/v1/financial/expenses"
+  //   const savingsUrl = "http://localhost:5000/api/v1/financial/savings"
+  //   const goalsUrl = "http://localhost:5000/api/v1/financial/goals"
+
+  //   usePost(incomeUrl, income, uid)
+  //   usePost(expensesUrl, expenses, uid)
+  //   usePost(savingsUrl, savings, uid)
+  //   usePost(goalsUrl, goals, uid)
+
+  
   };
 
   const renderStepContent = () => {
@@ -77,10 +96,9 @@ console.log('financialData', financialData)
             setFinancialData={setFinancialData}
             onPrev={handlePrev}
           />
-        );  
+        );
       default:
         return null;
-
     }
   };
 
@@ -152,17 +170,24 @@ console.log('financialData', financialData)
               icon={<FaArrowLeft />}
               className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
             />
-            <Button
-              onClick={handleNext}
-              label={"Submit"}
-              className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
-            />
+            {onProfile ? (
+              <Button
+                onClick={handleSubmitFinancialProfile}
+                label={"Submit"}
+                className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
+              />
+            ) : (
+              <Button
+                onClick={handleNext}
+                label={"Generate"}
+                className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
+              />
+            )}
           </div>
         </div>
       )}
     </div>
   );
-  
 };
 
 export default FinancialProfileWizard;

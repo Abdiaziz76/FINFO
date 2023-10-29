@@ -6,7 +6,7 @@ import HomePage from '../layouts/HomePage'
 import profile from '../assets/images/profile1.jpg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import FinancialProfileWizard from './FinancialProfile/FinanacialProfileWizard'
+import FinancialProfileWizard from './FinancialProfile/FinancialProfileWizard'
 
 const UserProfile = () => {
 
@@ -61,7 +61,7 @@ const UserProfile = () => {
           {/* <div className="flex w-full mt-8">
             <span className="flex items-center gap-2 hover:text-blue-800 cursor-pointer"><BiLogOut/> Logout</span>
           </div> */}
-        {/* <FinancialProfileWizard /> */}
+        <FinancialProfileWizard onProfile={true} />
 
         </div>
         {/* <FinancialProfileWizard /> */}
