@@ -1,7 +1,7 @@
 # FINFO: A financial advisor and educator
 
 FINFO is an all matters finance platform. Whether you are looking for advice on choosing a banking partner, where to get a particular service or what service best fits your needs, FINFO is here to help. In just a matter of seconds, you can get all the information you need to make the right (informed) decision.
-
+#### BACKEND REPO: https://github.com/EdwinAtieno/A2svHackathon
 ## Structure
 
 **This' the Frontend repository**: Here, you will find the frontend code for the *FINFO* platform, implemented using React. All the styling is done using Tailwind css.

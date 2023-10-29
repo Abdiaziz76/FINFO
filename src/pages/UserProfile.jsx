@@ -1,6 +1,6 @@
-// import React from 'react'
+import { useEffect } from 'react'
 import { BsChevronRight } from 'react-icons/bs'
-import { BiLogOut } from 'react-icons/bi'
+// import { BiLogOut } from 'react-icons/bi'
 
 import HomePage from '../layouts/HomePage'
 import profile from '../assets/images/profile1.jpg'
@@ -18,6 +18,17 @@ const UserProfile = () => {
     'subscription': 'premium'
   })
 
+  const { auth } = useAuth();
+
+  // get authenticated user's profile info
+  useEffect(() => async() => {
+    const res = await axiosPrivate.get(`/api/users/${auth?.user_id}/`, {headers: { Authorization: `Bearer ${auth.accessToken}`}})
+    if (res.status === 200) {
+      setUser({...user, ...res.data})
+      // console.log({ user })
+    }
+  }, [])
+
     return (
       <div className="dark:text-slate-200 flex flex-col  md:mt-2 h-full">
         <div className="flex flex-col gap-2 items-center rounded-md shadow-md dark:shadow-blue-800  w-full p-2 px-4 pb-8">
@@ -31,8 +42,8 @@ const UserProfile = () => {
             <div className="flex gap-6 items-center px-4">
               <img src={profile} alt="profile" className="w-16 h-16 rounded-full object-cover" />
               <div className="flex flex-col  text-sm items-start">
-                <span className="font-medium">Jane Doe</span>
-                <span className="dark:text-slate-400">jane@doe.com</span>
+                <span className="font-medium">{`${user.first_name} ${user.last_name}`}</span>
+                <span className="dark:text-slate-400">{user.email || 'email missing, add ...'}</span>
                 <span className="mt-2 p-1 bg-blue-800 rounded-md hover:bg-blue-500 text-white cursor-pointer"
                 onClick={() => setEdit(!edit)}
                 >{edit ? 'save changes' : 'edit profile'}</span>
@@ -41,7 +52,7 @@ const UserProfile = () => {
           </div>
           {/* body with: location , language and clear history action */}
           <div className="flex flex-col gap-2 w-full mt-4 px-4">
-            {['location', 'language', 'subscription'].map((item, id) => 
+            {['country', 'language', 'subscription'].map((item, id) => 
                <div key={id} className="flex gap-12 md:gap-3 items-center">
                <span className="text-start capitalize font-medium w-1/5">{item}:</span>
                {edit ? 
