@@ -11,14 +11,17 @@ import useAuth from '../hooks/useAuth'
 import { axiosPrivate } from '../lib/axios/axios'
 import UseFetchFinancialProfile from '../hooks/useFetchFinancialProfile'
 import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import Button from '../components/Button'
+import { useFinancialProfileData } from '../hooks/useFinancialProfileData'
 
 const UserProfile = () => {
-  const [financialData, setFinancialData] = useState({
-    income: [],
-    expenses: [],
-    savings: [],
-    goals: [],
-  });
+  // const [financialData, setFinancialData] = useState({
+  //   income: [],
+  //   expenses: [],
+  //   savings: [],
+  //   goals: [],
+  // });
+  const { financialData, setFinancialData } = useFinancialProfileData();
   console.log('profff', financialData )
   const navigate = useNavigate()
   const [edit, setEdit] = useState(false)
@@ -27,7 +30,10 @@ const UserProfile = () => {
     'language': 'english',
     'subscription': 'premium'
   })
-
+const [isEditMode, setEditMode] = useState(false);
+const toggleEditMode = () => {
+  setEditMode(!isEditMode);
+};
   const { auth } = useAuth();
   const {axiosInstance} = useAxiosPrivate();
 
@@ -168,11 +174,91 @@ const UserProfile = () => {
              </div>
             )}
           </div>
-          {/* logout action */}
-          {/* <div className="flex w-full mt-8">
-            <span className="flex items-center gap-2 hover:text-blue-800 cursor-pointer"><BiLogOut/> Logout</span>
-          </div> */}
-        <FinancialProfileWizard onProfile={true} />
+       
+  <div>
+    {isEditMode ? (
+      // Display the wizard component
+      <div className='flex flex-col'>
+      <button onClick={toggleEditMode} className='bg-red-600 p-1 self-end rounded-lg font-semibold' >Close</button>
+      <FinancialProfileWizard onProfile={true} />
+      </div>
+    ) : (
+      // Display the tabular form
+      <div className=' mt-3 w-full'>
+        {/* Render the financial data in tabular form */}
+        <h4 className='text-xl' >Financial Profile</h4>
+        <div className='flex flex-col md:flex-row flex-wrap gap-4'>
+        <table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Income</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Source</th>
+    <th className="p-2">Amount</th>
+    <th className="p-2">Frequency</th>
+  </tr>
+  {financialData.income.map((incomeItem) => (
+    <tr key={incomeItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{incomeItem.source}</td>
+      <td className="p-2">{incomeItem.amount}</td>
+      <td className="p-2">{incomeItem.frequency}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Expenses</h4>
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Category</th>
+    <th className="p-2">Amount</th>
+  </tr>
+  {financialData.expenses.map((expenseItem) => (
+    <tr key={expenseItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{expenseItem.category}</td>
+      <td className="p-2">{expenseItem.amount}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Savings</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Type</th>
+    <th className="p-2">Amount</th>
+  </tr>
+  {financialData.savings.map((savingsItem) => (
+    <tr key={savingsItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{savingsItem.type}</td>
+      <td className="p-2">{savingsItem.amount}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Goals</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Description</th>
+    <th className="p-2">Target</th>
+  </tr>
+  {financialData.goals.map((goalItem) => (
+    <tr key={goalItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{goalItem.description}</td>
+      <td className="p-2">{goalItem.target}</td>
+    </tr>
+  ))}
+</table>
+
+        </div>
+
+
+        {/* Edit button to toggle the wizard */}
+        <Button onClick={toggleEditMode} label={'Edit'} />
+      </div>
+    )}
+  </div>
+
+
         
 
         </div>

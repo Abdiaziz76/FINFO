@@ -10,6 +10,9 @@ import Button from "../../components/Button.jsx";
 import { FaArrowLeft } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth.js";
 import usePost from "../../hooks/usePost.js";
+import usePatch from "../../hooks/usePatch.js";
+import { useFinancialProfileData } from "../../hooks/useFinancialProfileData.js";
+import useAxiosPrivate from "../../hooks/useAxiosPrivate.js";
 
 
 
@@ -17,11 +20,13 @@ import usePost from "../../hooks/usePost.js";
 const FinancialProfileWizard = ({ onProfile }) => {
   const {auth} = useAuth()
   const uid = auth.user_id
+const axiosPrivate = useAxiosPrivate();
 
-  const incomeUrl = "api/api/income/"
+const incomeUrl = "api/api/income/"
 const expensesUrl = "api/api/expenses/"
 const savingsUrl = "api/api/savings/"
 const goalsUrl = "api/api/goals/"
+
 
 
 const incomePost = usePost(incomeUrl);
@@ -29,47 +34,9 @@ const expensesPost = usePost(expensesUrl);
 const savingsPost = usePost(savingsUrl);
 const goalsPost = usePost(goalsUrl);
 
-  const [financialData, setFinancialData] = useState({
-    "income": [
-        {
-            "source": "dsjvsdkj",
-            "amount": "kjnkjnk",
-            "frequency": "jkhjkh",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        }
-    ],
-    "expenses": [
-        {
-            "category": "kbjbkjb",
-            "amount": "9876986",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        },
-        {
-            "category": "jbkjbkj",
-            "amount": "98798798",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        }
-    ],
-    "savings": [
-        {
-            "type": "jbkjbkj",
-            "amount": "87987987",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        }
-    ],
-    "goals": [
-        {
-            "description": "jhgihgig",
-            "target": "89798798",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        },
-        {
-            "description": "kjbkjblj",
-            "target": "87987987",
-            "user": "836aea3052e74f8290b6b5b4c7752b9d"
-        }
-    ]
-});
+
+
+const { financialData, setFinancialData } = useFinancialProfileData();
 
   console.log("financialData", financialData);
   // console.log("financialData", financialData);
@@ -83,7 +50,7 @@ const goalsPost = usePost(goalsUrl);
     setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmitFinancialProfile = () => {
+  const handleSubmitFinancialProfile = async () => {
     // Process or submit the financial data as needed
     console.log("financialData", financialData);
     // destructuring the financialData object
@@ -107,14 +74,49 @@ const goalsPost = usePost(goalsUrl);
 
     console.log("income", income, "/n expenses", expenses, "savings", savings, "goals", goals);
 
+    for (const item of income) {
+      if (item.id) {
+        // If an 'id' exists, it's an existing item, so send a patch request
+        await axiosPrivate.patch(`api/api/income/${item.id}/`, item);
+      } else {
+        // If no 'id' exists, it's a new item, so send a post request
+        const response = await axiosPrivate.post('api/api/income/', item);
+        console.log('response', response)
 
-    incomePost.postData(...income);
-    expensesPost.postData(...expenses);
-    savingsPost.postData(...savings);
-    goalsPost.postData(...goals);
+      }
+    }
+
+    for (const item of expenses) {
+      if (item.id) {
+        await axiosPrivate.patch(`api/api/expenses/${item.id}/`, item);
+      } else {
+        const response = await axiosPrivate.post('api/api/expenses/', item);
+        console.log('response', response)
+       
+      }
+    }
+
+    for (const item of savings) {
+      if (item.id) {
+        await axiosPrivate.patch(`api/api/savings/${item.id}/`, item);
+      } else {
+        const response = await axiosPrivate.post('api/api/savings/', item);
+       console.log('response', response)
+     
+      }
+    }
+
+    for (const item of goals) {
+      if (item.id) {
+        await axiosPrivate.patch(`api/api/goals/${item.id}/`, item);
+      } else {
+        const response = await axiosPrivate.post('api/api/goals/', item);
+       console.log('response', response)
+      }
+    }
     
 
-  
+
   };
 
   const FinancialDataCard = ({ title, items }) => (
@@ -202,12 +204,73 @@ const goalsPost = usePost(goalsUrl);
         <div className="flex flex-col gap-3 w-full">
           {/* Display profile content for confirmation */}
           <h4 className="font-semibold">Confirm Financial details</h4>
-          <div className="flex flex-col md:flex-row gap-4">
-      <FinancialDataCard title="Income" items={financialData.income} />
-      <FinancialDataCard title="Expenses" items={financialData.expenses} />
-      <FinancialDataCard title="Savings" items={financialData.savings} />
-      <FinancialDataCard title="Goals" items={financialData.goals} />
-    </div>
+          <div className='flex flex-col md:flex-row flex-wrap gap-4 mt-3 w-full'>
+        {/* Render the financial data in tabular form */}
+        <table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Income</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Source</th>
+    <th className="p-2">Amount</th>
+    <th className="p-2">Frequency</th>
+  </tr>
+  {financialData.income.map((incomeItem) => (
+    <tr key={incomeItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{incomeItem.source}</td>
+      <td className="p-2">{incomeItem.amount}</td>
+      <td className="p-2">{incomeItem.frequency}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Expenses</h4>
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Category</th>
+    <th className="p-2">Amount</th>
+  </tr>
+  {financialData.expenses.map((expenseItem) => (
+    <tr key={expenseItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{expenseItem.category}</td>
+      <td className="p-2">{expenseItem.amount}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Savings</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Type</th>
+    <th className="p-2">Amount</th>
+  </tr>
+  {financialData.savings.map((savingsItem) => (
+    <tr key={savingsItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{savingsItem.type}</td>
+      <td className="p-2">{savingsItem.amount}</td>
+    </tr>
+  ))}
+</table>
+
+<table className="mb-4">
+<h4 className="text-lg font-semibold mb-2">Goals</h4>
+
+  <tr className="border border-slate-500 dark:border-slate-200">
+    <th className="p-2">Description</th>
+    <th className="p-2">Target</th>
+  </tr>
+  {financialData.goals.map((goalItem) => (
+    <tr key={goalItem.id} className="border border-slate-500 dark:border-slate-200">
+      <td className="p-2">{goalItem.description}</td>
+      <td className="p-2">{goalItem.target}</td>
+    </tr>
+  ))}
+</table>
+
+
+        {/* Edit button to toggle the wizard */}
+        {/* <Button onClick={toggleEditMode} label={'Edit'} /> */}
+      </div>
           <div className="flex flex-row gap-3 self-end">
             <Button
               onClick={handlePrev}

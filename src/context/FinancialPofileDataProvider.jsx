@@ -4,22 +4,37 @@ export const FinancialProfileDataContext = createContext();
 
 export function FinancialProfileDataProvider({ children }) {
   const [financialData, setFinancialData] = useState({
-    "income": [
-    
+    income: [
+      {
+        source: "",
+        amount: "",
+        frequency: "",
+      },
     ],
-    "expenses": [
-  
+    expenses: [
+      {
+        category: "",
+        amount: "",
+      },
     ],
-    "savings": [
-  
+    savings: [
+      {
+        type: "",
+        amount: "",
+      },
     ],
-    "goals": [
- 
-    ]
+    goals: [
+      {
+        description: "",
+        target: "",
+      },
+    ],
   });
 
   return (
-    <FinancialProfileDataContext.Provider value={{ financialData, setFinancialData }}>
+    <FinancialProfileDataContext.Provider
+      value={{ financialData, setFinancialData }}
+    >
       {children}
     </FinancialProfileDataContext.Provider>
   );
