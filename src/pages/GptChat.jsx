@@ -221,7 +221,7 @@ function GptChat() {
       addMessage(message)
     })
 
-    console.log('setting current session: ', { messages })
+    // console.log('setting current session: ', { messages })
 
   }
 
@@ -231,7 +231,7 @@ function GptChat() {
     const payload = {user: auth.user_id}
     // const payload = {}
       const resp = await axiosPrivate.post('api/chat-sessions/', payload, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
-      console.log('new session: ', { resp })
+      // console.log('new session: ', { resp })
       if (resp.status === 201) {
         setCurrentSession(resp.data.id)
         setCurrentConversation(resp.data.id)
