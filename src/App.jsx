@@ -30,7 +30,7 @@ function App() {
         <Route path="/signin" element={<Signin />}></Route>
         {/* <Route path="/home" element={<HomePage />} /> */}
         <Route element={<PersistLogin />}>
-          {/* <Route element={<RequireAuth allowedRoles={[]} />}> */}
+          <Route element={<RequireAuth allowedRoles={[]} />}>
        
         <Route path="/chat" element={<AiChat />}></Route>
         <Route path="/recommendations" element={<Recommendations />}></Route>
@@ -39,7 +39,7 @@ function App() {
         <Route path="/history" element={<History />}></Route>
         <Route path="/gptchat" element={<GptChat />}></Route>
         </Route>
-        {/* </Route> */}
+        </Route>
 
       </Routes>
       </Router>
