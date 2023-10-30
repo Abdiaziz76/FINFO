@@ -46,11 +46,6 @@ const path = location.pathname.slice(1);
             link: '/gptchat',
         },
         {
-            icon: <FaHistory />,
-            name: 'history',
-            link: '/history',
-        },
-        {
             icon: <FaUserEdit />,
             name: 'profile',
             link: '/profile',

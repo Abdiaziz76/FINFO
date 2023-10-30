@@ -1,9 +1,14 @@
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import HomePage from '../layouts/HomePage';
 import { useChat } from '../context/chatContext';
 import { IoSend } from 'react-icons/io5';
 import { profile } from '../assets/images';
 import { bot } from '../assets/images';
+
+import HistoryItem from '../components/HistoryItem';
+import MobileHistory from '../components/MobileHistory';
+import { axiosPrivate } from '../lib/axios/axios';
+import useAuth from '../hooks/useAuth';
 
 const API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
 
@@ -30,10 +35,19 @@ const systemMessage = {
 };
 
 function GptChat() {
-  const { messages, addMessage } = useChat();
+  const { messages, addMessage, clearMessages } = useChat();
   const [isTyping, setIsTyping] = useState(false);
   const [inputMessage, setInputMessage] = useState("");
   const messageEndRef = useRef(null);
+
+  const { auth } = useAuth()
+
+  /* History management */
+  // const [historySession, setHistorySession] = useState('')
+  const [history, setHistory] = useState([])
+  const [showHistory, setShowHistory] = useState(false)
+  const [sessions, setSessions] = useState([])
+  const [currentSession, setCurrentSession] = useState('')
 
   
 
@@ -61,9 +75,16 @@ function GptChat() {
     setIsTyping(true);
 
     try {
-      const chatGptResponse = await processMessageToChatGPT(message);
+      // const chatGptResponse = await processMessageToChatGPT(message);
 
-      // Display ChatGPT's response
+      const req = {user_message: message, model_response:"", role: "user", session: sessions?.results?.filter(session => session.user === auth.user_id)[-1]}
+      const res = await axiosPrivate.post('api/chat-messages/', req, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
+
+      const chatGptResponse = res.data.model_response
+      console.log('gpt res', { chatGptResponse })
+
+
+      // // Display ChatGPT's response
       addMessage({
         message: chatGptResponse,
         direction: 'incoming',
@@ -108,11 +129,128 @@ function GptChat() {
     return data.choices[0].message.content;
   }
 
+  /* creating a session & handling history
+    REM: a session should only be created if there are no sessions for  user or if they want to start a new topic
+  */
+  useEffect(() => async() => {
+
+    const res = await axiosPrivate.get('api/chat-sessions/', { headers: { Authorization: `Bearer ${auth.accessToken}`}})
+    if (res.status === 200) {
+      setSessions(res.data?.results?.filter(session => session.user === auth.user_id))
+    }
+
+    if (sessions.length === 0) {
+      console.log('creating a session!')
+      // create a session & save to session (conversation) - just make the whole conversation an object
+      const payload = {conversation_history: messages, user: auth.user_id}
+      const resp = await axiosPrivate.post('api/chat-sessions/', payload, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
+      console.log({ resp })
+      if (resp.status === 201) {
+        setCurrentSession(resp.data.id)
+        // console.log('current session: ', resp.data.id, ' and convos: ', resp.data.conversation_history)
+      } else {
+        console.log('Session creation failed!')
+      }
+    } else {
+      setCurrentSession(sessions.slice(-1)[0]?.id)
+      // console.log('current session: ', sessions.slice(-1)[0]?.id)
+      // console.log({ currentSession }, 'current session convo: ', res.data.conversation_history)
+    }
+
+    // get user's history (essentially sessions with a summary (topical) - how can I get that (summarize the first question of a session)?)
+    // if (!historySession) {
+    //   const resp = await axiosPrivate.post('api/chat-sessions/', {}, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
+    //   if (resp.status === 201) {
+    //     setHistorySession(resp.data?.id)
+    //     // console.log('history session: ', resp.data)
+    //   }
+    // }
+
+    // console.log({ history })
+
+  }, [])
+
+  const getTopic = async(session) => {
+    // console.log({ session })
+    // const req = {user_message: `summarize the following statement into a short sentence: ${session.conversation_history[0]?.content}`, model_response:"", role: "user", session: historySession}
+    // const res = await axiosPrivate.post('api/chat-messages/', req, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
+    // const res = await processMessageToChatGPT(`I am looking to display topical-like phrases to summarize conversations. In most circumstances, the conversations will be long sentences, mostly questions. Summarize them, if they can be summarized, into a short sentence, Otherwise, return the original statement without adding anything to it. For instance, if the statement is 'Hello', just return 'hello'. Statement: ${session.conversation_history[0]?.content}`)
+    const res = await processMessageToChatGPT(`I am looking to display topical-like phrases that are summaries of given statements. In most circumstances, the conversations will be long sentences, mostly questions. Summarize them, if they can be summarized, into a short sentence, Otherwise, return the original statement without adding anything to it. For instance, given Statement: 'Hello' return Topic: 'hello'. Given Statement: What is Kenya's economic situation right now? return Topic: 'Kenya's economic situation'. Statement: ${session.conversation_history[0]?.content}. Topic:`)
+    // if (res.status === 201) {
+    // const historyItem = {id: session.id, topic: res.data.model_response, questions: session.conversation_history.length / 2}
+    
+    if (history?.filter(hist => hist.id === session.id)?.length === 0) {
+      const historyItem = {id: session.id, topic: res, questions: Math.floor(session.conversation_history.length / 2)}
+      setHistory([...history, historyItem])
+    }
+    // } else {
+    //   console.log('getting session summary failed for: ', session.id)
+    // }
+  }
+
+  useEffect(() => {
+    setHistory([])
+    sessions?.map(session => getTopic(session))
+  }, [sessions.length])
+
+  // console.log({ sessions }, { currentSession })
+  // console.log('history session: ', historySession)
+
+  /* set messages to a session's conversation history whenever a history topic is chosen */
+  const setCurrentConversation = (sessionId) => {
+    //clear current context
+    clearMessages()
+    //set current session's convo as context
+    const conversations = sessions?.filter(session => session.id === sessionId)[0]?.conversation_history
+    // console.log({ conversations })
+    conversations.map(chat => {
+      let message;
+      if (chat.role === 'user') {
+        message = {
+          message: chat.content,
+          direction: 'outgoing',
+          sender: 'user',
+        }
+      } else {
+        message = {
+          message: typeof(chat.content) === 'string' ? chat.content : chat.content[0],
+          direction: 'incoming',
+          sender: 'ChatGPT',
+        }
+      }
+      addMessage(message)
+    })
+
+    // console.log('setting current session: ', { messages })
+
+  }
+
+  // console.log('res 78: ', sessions[0]?.conversation_history[78].content[0])
+
+  const createNewSession = async() => {
+    const payload = {user: auth.user_id}
+    // const payload = {}
+      const resp = await axiosPrivate.post('api/chat-sessions/', payload, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
+      // console.log('new session: ', { resp })
+      if (resp.status === 201) {
+        setCurrentSession(resp.data.id)
+        setCurrentConversation(resp.data.id)
+        // console.log('current session: ', resp.data.id, ' and convos: ', resp.data.conversation_history)
+      } else {
+        console.log('Session creation failed!')
+      }
+  }
+
+  // console.log({ sessions })
+
   return (
-    <div className="gpt h-full">
-      <div className="h-full w-full bg-slate-100 dark:bg-slate-800">
-        <div className="chat-container flex flex-col justify-between h-full py-2">
+    <div className="gpt h-full relative">
+      <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex">
+        <div className="chat-container flex flex-col justify-between h-full py-2 flex-1">
           <div className="message-list flex flex-col" >
+            <div className="flex md:hidden dark:text-blue-400 items-center justify-end py-2 mb-4">
+              <span className="hover:underline cursor-pointer" onClick={() => setShowHistory(true)}>See history</span>
+            </div>
             {messages.map((message, i) => (
               <div
                 key={i}
@@ -157,7 +295,18 @@ function GptChat() {
             </div>
           </>
         </div>
+        <div className="hidden md:flex flex-col gap-2 border-l border-slate-600 w-[250px] pl-2 text-start">
+          <div className="flex p-2 justify-center rounded bg-blue-500 mb-8 transition-colors hover:bg-blue-400 cursor-pointer"
+            onClick={() => createNewSession()}
+          >
+            <span className="text-white">Start New topic</span>
+          </div>
+          {/* NOTE/REMEMBER: HistoryItem should set the current chat conversation to that particular history's...
+            - which's literally just setting messages to the current sessions history */}
+          {history?.map(item => <HistoryItem key={item.id} item={item} setCurrentConversation={setCurrentConversation} />)}
+        </div>
       </div>
+      {showHistory && <MobileHistory setShowHistory={setShowHistory} history={history} setCurrentConversation={setCurrentConversation} />}
     </div>
   );
 }
