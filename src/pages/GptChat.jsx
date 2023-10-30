@@ -296,7 +296,7 @@ function GptChat() {
           </>
         </div>
         <div className="hidden md:flex flex-col gap-2 border-l border-slate-600 w-[250px] pl-2 text-start">
-          <div className="flex p-2 justify-end rounded bg-blue-500 mb-8 transition-colors hover:bg-blue-400 cursor-pointer"
+          <div className="flex p-2 justify-center rounded bg-blue-500 mb-8 transition-colors hover:bg-blue-400 cursor-pointer"
             onClick={() => createNewSession()}
           >
             <span className="text-white">Start New topic</span>
