@@ -3,6 +3,7 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { FaPlus, FaTimes } from 'react-icons/fa';
 import Button from './Button.jsx';
 import InputField from './InputField.jsx';
+import { useFinancialRecommendations } from '../context/recommendationsContext.jsx';
 
 
 const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
@@ -12,6 +13,7 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
   };
 
   const handleAddIncome = () => {
+    //if financialdatta income is 
     const updatedIncome = [...financialData.income, { source: '', amount: 0, frequency: '' }];
     setFinancialData({ ...financialData, income: updatedIncome });
   };
@@ -28,7 +30,7 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
         Income:
       </label>
       {financialData.income.map((income, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Income source'
@@ -96,7 +98,7 @@ const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) 
         Expenses:
       </label>
       {financialData.expenses.map((expense, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Expense category'
@@ -156,7 +158,7 @@ const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) =
         Savings:
       </label>
       {financialData.savings.map((savings, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Savings type'
@@ -195,17 +197,20 @@ const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) =
 
 
 const FinancialRecommendations = ({ financialData, onPrev, onNext }) => {
-  const [recommendations, setRecommendations] = useState("");
+  const { recommendations, updateRecommendations, clearRecommendations } = useFinancialRecommendations();
+  // const [recommendations, setRecommendations] = useState("");
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // Your OpenAI API key
   const userCountry = "Kenya"; // TODO: Get my country from the user profile
-
+  const [isLoading, setIsLoading] = useState(false);
 
     const generateRecommendations = async () => {
       try {
+        setIsLoading(true);
         const response = await fetchRecommendations(apiKey, financialData);
 
         // Set the generated recommendations in the state
-        setRecommendations(response);
+        updateRecommendations(response);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error generating recommendations: ", error);
       }
@@ -346,15 +351,24 @@ const handleSubmit = () => {
 
   return (
     <div className="dark:text-white p-4 rounded-lg mt-4 h-full w-full flex flex-col">
-      <h2 className="text-2xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
-        AI-Generated Financial Recommendations
-      </h2>
-      <div className="text-left mb-4" dangerouslySetInnerHTML={{ __html: recommendations }} />
+      {isLoading ? (<div className="flex flex-col justify-center items-center h-full">
+        <h2 className="text-xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
+          Generating Recommendations for you...This might take a while
+        </h2>
+        <div className="animate-spin dark:text-white dark:border-white rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>)
+      :(<div>
+        <h2 className="text-2xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
+          AI-Generated Financial Recommendations
+        </h2>
+        <div className="text-left mb-4" dangerouslySetInnerHTML={{ __html: recommendations }} />
+      </div>)}
       <div className="flex flex-row gap-3 self-end">
        
         <Button
           onClick={handleSubmit}
           label={"Generate"}
+          disabled = {isLoading}
           className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
         />
          <Button
@@ -395,7 +409,7 @@ const FinancialGoals = ({ financialData, setFinancialData, onPrev, onNext }) => 
         Financial Goals:
       </label>
       {financialData.goals.map((goal, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Goal description'

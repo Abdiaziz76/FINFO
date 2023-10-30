@@ -109,7 +109,7 @@ function GptChat() {
   }
 
   return (
-    <div className="gpt h-full">
+    <div className="gpt h-screen">
       <div className="h-full w-full bg-slate-100 dark:bg-slate-800">
         <div className="chat-container flex flex-col justify-between h-full py-2">
           <div className="message-list flex flex-col" >

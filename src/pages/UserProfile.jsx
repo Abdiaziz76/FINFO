@@ -6,12 +6,20 @@ import HomePage from '../layouts/HomePage'
 import profile from '../assets/images/profile1.jpg'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import FinancialProfileWizard from './FinancialProfile/FinanacialProfileWizard'
-import { axiosPrivate } from '../lib/axios/axios'
+import FinancialProfileWizard from './FinancialProfile/FinancialProfileWizard'
 import useAuth from '../hooks/useAuth'
+import { axiosPrivate } from '../lib/axios/axios'
+import UseFetchFinancialProfile from '../hooks/useFetchFinancialProfile'
+import useAxiosPrivate from '../hooks/useAxiosPrivate'
 
 const UserProfile = () => {
-
+  const [financialData, setFinancialData] = useState({
+    income: [],
+    expenses: [],
+    savings: [],
+    goals: [],
+  });
+  console.log('profff', financialData )
   const navigate = useNavigate()
   const [edit, setEdit] = useState(false)
   const [user, setUser] = useState({
@@ -21,15 +29,105 @@ const UserProfile = () => {
   })
 
   const { auth } = useAuth();
+  const {axiosInstance} = useAxiosPrivate();
+
 
   // get authenticated user's profile info
   useEffect(() => async() => {
     const res = await axiosPrivate.get(`/api/users/${auth?.user_id}/`, {headers: { Authorization: `Bearer ${auth.accessToken}`}})
     if (res.status === 200) {
       setUser({...user, ...res.data})
-      // console.log({ user })
+      console.log({ user })
     }
   }, [])
+
+  //fetch financial data
+  useEffect(() => {
+    
+
+    const userId = auth?.user_id;
+    const incomeUrl = "api/api/income/"
+    const expensesUrl = "api/api/expenses/"
+    const savingsUrl = "api/api/savings/"
+    const goalsUrl = "api/api/goals/"
+
+    const fetchAndFilterData = async (endpoint, userId) => {
+      
+          try {
+            const response = await axiosPrivate.get(endpoint);
+            const data = response.data.results;
+        console.log('data', data)
+            // Filter the data to get the profile data for the specific user
+            const filteredData = data.filter((item) => item.user === userId);
+        
+            return filteredData;
+          } catch (error) {
+            console.error("Failed to fetch data: ", error);
+          }
+        };
+      
+    // Fetch and update income data for the user
+    const fetchIncomeData = async () => {
+      try {
+        const incomeData = await fetchAndFilterData(incomeUrl, userId);
+        setFinancialData((prevData) => ({
+          ...prevData,
+          income: incomeData,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch income data: ", error);
+      }
+    };
+
+    // Fetch and update expenses data for the user
+    const fetchExpensesData = async () => {
+      try {
+        const expensesData = await fetchAndFilterData(expensesUrl, userId);
+        setFinancialData((prevData) => ({
+          ...prevData,
+          expenses: expensesData,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch expenses data: ", error);
+      }
+    };
+
+    // Fetch and update savings data for the user
+    const fetchSavingsData = async () => {
+      try {
+        const savingsData = await fetchAndFilterData(savingsUrl, userId);
+        setFinancialData((prevData) => ({
+          ...prevData,
+          savings: savingsData,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch savings data: ", error);
+      }
+    };
+
+    // Fetch and update goals data for the user
+    const fetchGoalsData = async () => {
+      try {
+        const goalsData = await fetchAndFilterData(goalsUrl, userId);
+        setFinancialData((prevData) => ({
+          ...prevData,
+          goals: goalsData,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch goals data: ", error);
+      }
+    };
+
+    // Fetch data only once, after the initial render
+    fetchIncomeData();
+    fetchExpensesData();
+    fetchSavingsData();
+    fetchGoalsData();
+  }
+  , [])
+
+
+  
 
     return (
       <div className="dark:text-slate-200 flex flex-col  md:mt-2 h-full">
@@ -74,7 +172,8 @@ const UserProfile = () => {
           {/* <div className="flex w-full mt-8">
             <span className="flex items-center gap-2 hover:text-blue-800 cursor-pointer"><BiLogOut/> Logout</span>
           </div> */}
-        {/* <FinancialProfileWizard /> */}
+        <FinancialProfileWizard onProfile={true} />
+        
 
         </div>
         {/* <FinancialProfileWizard /> */}
