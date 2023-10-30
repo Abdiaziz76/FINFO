@@ -228,8 +228,8 @@ function GptChat() {
   // console.log('res 78: ', sessions[0]?.conversation_history[78].content[0])
 
   const createNewSession = async() => {
-    // const payload = {user: auth.user_id}
-    const payload = {}
+    const payload = {user: auth.user_id}
+    // const payload = {}
       const resp = await axiosPrivate.post('api/chat-sessions/', payload, { headers: {Authorization: `Bearer ${auth.accessToken}`}})
       console.log('new session: ', { resp })
       if (resp.status === 201) {

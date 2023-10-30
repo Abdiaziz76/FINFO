@@ -43,11 +43,11 @@ const path = location.pathname.slice(1);
             name: 'chat',
             link: '/gptchat',
         },
-        {
-            icon: <BsClockHistory />,
-            name: 'history',
-            link: '/history',
-        },
+        // {
+        //     icon: <BsClockHistory />,
+        //     name: 'history',
+        //     link: '/history',
+        // },
         {
             icon: <CiUser />,
             name: 'profile',
