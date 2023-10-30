@@ -13,6 +13,7 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
   };
 
   const handleAddIncome = () => {
+    //if financialdatta income is 
     const updatedIncome = [...financialData.income, { source: '', amount: 0, frequency: '' }];
     setFinancialData({ ...financialData, income: updatedIncome });
   };
@@ -29,7 +30,7 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
         Income:
       </label>
       {financialData.income.map((income, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Income source'
@@ -97,7 +98,7 @@ const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) 
         Expenses:
       </label>
       {financialData.expenses.map((expense, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Expense category'
@@ -157,7 +158,7 @@ const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) =
         Savings:
       </label>
       {financialData.savings.map((savings, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Savings type'
@@ -408,7 +409,7 @@ const FinancialGoals = ({ financialData, setFinancialData, onPrev, onNext }) => 
         Financial Goals:
       </label>
       {financialData.goals.map((goal, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Goal description'

@@ -9,19 +9,69 @@ import {
 import Button from "../../components/Button.jsx";
 import { FaArrowLeft } from "react-icons/fa";
 import useAuth from "../../hooks/useAuth.js";
+import usePost from "../../hooks/usePost.js";
+
+
+
 
 const FinancialProfileWizard = ({ onProfile }) => {
   const {auth} = useAuth()
   const uid = auth.user_id
 
-  const [financialData, setFinancialData] = useState({
-    income: [{ income: "" }],
-    expenses: [{ expenses: "" }],
-    savings: [{ savings: "" }],
-    goals: [{ goals: "" }],
-  });
+  const incomeUrl = "api/api/income/"
+const expensesUrl = "api/api/expenses/"
+const savingsUrl = "api/api/savings/"
+const goalsUrl = "api/api/goals/"
 
-  // console.log("financialData", financialData);
+
+const incomePost = usePost(incomeUrl);
+const expensesPost = usePost(expensesUrl);
+const savingsPost = usePost(savingsUrl);
+const goalsPost = usePost(goalsUrl);
+
+  const [financialData, setFinancialData] = useState({
+    "income": [
+        {
+            "source": "dsjvsdkj",
+            "amount": "kjnkjnk",
+            "frequency": "jkhjkh",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        }
+    ],
+    "expenses": [
+        {
+            "category": "kbjbkjb",
+            "amount": "9876986",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        },
+        {
+            "category": "jbkjbkj",
+            "amount": "98798798",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        }
+    ],
+    "savings": [
+        {
+            "type": "jbkjbkj",
+            "amount": "87987987",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        }
+    ],
+    "goals": [
+        {
+            "description": "jhgihgig",
+            "target": "89798798",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        },
+        {
+            "description": "kjbkjblj",
+            "target": "87987987",
+            "user": "836aea3052e74f8290b6b5b4c7752b9d"
+        }
+    ]
+});
+
+  console.log("financialData", financialData);
   // console.log("financialData", financialData);
   const [currentStep, setCurrentStep] = useState(1);
 
@@ -37,20 +87,60 @@ const FinancialProfileWizard = ({ onProfile }) => {
     // Process or submit the financial data as needed
     console.log("financialData", financialData);
     // destructuring the financialData object
-    const { income, expenses, savings, goals } = financialData;
-    console.log("income", income, "/n expenses", expenses, "savings", savings, "goals", goals);
-  //  const incomeUrl = "http://localhost:5000/api/v1/financial/income"
-  //   const expensesUrl = "http://localhost:5000/api/v1/financial/expenses"
-  //   const savingsUrl = "http://localhost:5000/api/v1/financial/savings"
-  //   const goalsUrl = "http://localhost:5000/api/v1/financial/goals"
+    let { income, expenses, savings, goals } = financialData;
+    //append user_id to each object
+    income.forEach((income) => {
+      income.user = uid;
+    });
+    expenses.forEach((expense) => {
+      expense.user = uid;
+    });
+    savings.forEach((saving) => {
+      saving.user = uid;
+    });
+    goals.forEach((goal) => {
+      goal.user = uid;
+    });
 
-  //   usePost(incomeUrl, income, uid)
-  //   usePost(expensesUrl, expenses, uid)
-  //   usePost(savingsUrl, savings, uid)
-  //   usePost(goalsUrl, goals, uid)
+    
+
+
+    console.log("income", income, "/n expenses", expenses, "savings", savings, "goals", goals);
+
+
+    incomePost.postData(...income);
+    expensesPost.postData(...expenses);
+    savingsPost.postData(...savings);
+    goalsPost.postData(...goals);
+    
 
   
   };
+
+  const FinancialDataCard = ({ title, items }) => (
+    <div className="rounded-lg shadow-md p-4 bg-white dark:bg-slate-800">
+      <h3 className="text-lg font-semibold mb-2 dark:text-white">{title}</h3>
+      {items.map((item, index) => (
+        <div key={index} className="mb-2 dark:text-slate-400">
+          {Object.keys(item)
+            .filter((key) => key !== "user") // Exclude "user" key
+            .map((key) => (
+              <p key={key} className="dark:text-slate-300">
+                <span className="font-semibold">
+                  {`${key.charAt(0).toUpperCase() + key.slice(1)}:`}
+                </span>
+                <span className="ml-2">{item[key]}</span>
+              </p>
+            ))}
+        </div>
+      ))}
+    </div>
+  );
+  
+  
+
+  
+  
 
   const renderStepContent = () => {
     switch (currentStep) {
@@ -112,57 +202,12 @@ const FinancialProfileWizard = ({ onProfile }) => {
         <div className="flex flex-col gap-3 w-full">
           {/* Display profile content for confirmation */}
           <h4 className="font-semibold">Confirm Financial details</h4>
-          <div className="flex flex-col gap-2 self-start w-full">
-            <div className="flex gap-2 w-full">
-              <h3 className="text-md w-1/6 text-right">Income</h3>
-              <div className="text-left">
-                {financialData.income.map((incomeData, index) => (
-                  <div key={index}>
-                    <p>{`Source: ${incomeData.source}`}</p>
-                    <p>{`Amount: ${incomeData.amount}`}</p>
-                    <p>{`Frequency: ${incomeData.frequency}`}</p>
-                    <hr className="text-slate-900" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex gap-2 w-full">
-              <h3 className="text-md w-1/6 text-right">Expenses</h3>
-              <div className="text-left">
-                {financialData.expenses.map((expenseData, index) => (
-                  <div key={index}>
-                    <p>{`Category: ${expenseData.category}`}</p>
-                    <p>{`Amount: ${expenseData.amount}`}</p>
-                    <hr className="text-slate-900" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex gap-2 w-full">
-              <h3 className="text-md w-1/6 text-right">Savings</h3>
-              <div className="text-left">
-                {financialData.savings.map((savingsData, index) => (
-                  <div key={index}>
-                    <p>{`Type: ${savingsData.type}`}</p>
-                    <p>{`Amount: ${savingsData.amount}`}</p>
-                    <hr className="text-slate-900" />
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="flex gap-2 w-full">
-              <h3 className="text-md w-1/6 text-right">Goals</h3>
-              <div className="text-left">
-                {financialData.goals.map((goalData, index) => (
-                  <div key={index}>
-                    <p>{`Description: ${goalData.description}`}</p>
-                    <p>{`Target: ${goalData.target}`}</p>
-                    <hr className="text-slate-900" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <div className="flex flex-col md:flex-row gap-4">
+      <FinancialDataCard title="Income" items={financialData.income} />
+      <FinancialDataCard title="Expenses" items={financialData.expenses} />
+      <FinancialDataCard title="Savings" items={financialData.savings} />
+      <FinancialDataCard title="Goals" items={financialData.goals} />
+    </div>
           <div className="flex flex-row gap-3 self-end">
             <Button
               onClick={handlePrev}

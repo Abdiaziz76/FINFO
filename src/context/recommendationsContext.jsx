@@ -13,7 +13,7 @@ export const FinancialRecommendationsProvider = ({ children }) => {
     setRecommendations(storedRecommendations);
   }, []);
 
-  // Save recommendations to local storage whenever recommendations change
+  // Save recommendations to local storage when recommendations change
   useEffect(() => {
     localStorage.setItem('financialRecommendations', recommendations);
   }, [recommendations]);
