@@ -246,7 +246,7 @@ function GptChat() {
   return (
     <div className="gpt h-full relative">
       <div className="h-full w-full bg-slate-100 dark:bg-slate-800 flex">
-        <div className="chat-container flex flex-col justify-between h-full py-2 flex-1">
+        <div className="chat-container flex flex-col justify-between h-full min-h-screen py-2 flex-1">
           <div className="message-list flex flex-col" >
             <div className="flex md:hidden dark:text-blue-400 items-center justify-end py-2 mb-4">
               <span className="hover:underline cursor-pointer" onClick={() => setShowHistory(true)}>See history</span>
