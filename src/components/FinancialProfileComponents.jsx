@@ -3,23 +3,53 @@ import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import { FaPlus, FaTimes } from 'react-icons/fa';
 import Button from './Button.jsx';
 import InputField from './InputField.jsx';
+import { useFinancialRecommendations } from '../context/recommendationsContext.jsx';
+import usePost from '../hooks/usePost.js';
+import useAuth from '../hooks/useAuth.js';
+import useAxiosPrivate from '../hooks/useAxiosPrivate.js';
 
 
 const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
+  const axiosPrivate = useAxiosPrivate();
+  console.log('incommeee', financialData.income)
   const handleNext = () => {
     // Perform any data validation or processing if needed
     onNext();
   };
 
   const handleAddIncome = () => {
+    //if financialdatta income is 
     const updatedIncome = [...financialData.income, { source: '', amount: 0, frequency: '' }];
     setFinancialData({ ...financialData, income: updatedIncome });
   };
 
   const handleRemoveIncome = (index) => {
-    const updatedIncome = [...financialData.income];
-    updatedIncome.splice(index, 1);
-    setFinancialData({ ...financialData, income: updatedIncome });
+    const deletedIncome = financialData.income[index];
+
+    if (deletedIncome.id) {
+      // Send a DELETE request to the API using Axios to delete the income item
+      axiosPrivate
+        .delete(`api/api/income/${deletedIncome.id}/`)
+        .then((response) => {
+          if (response.status === 204) {
+            // If the delete request was successful, remove the item from the local state
+            const updatedIncome = [...financialData.income];
+            updatedIncome.splice(index, 1);
+            setFinancialData({ ...financialData, income: updatedIncome });
+          } else {
+            // Handle errors or display a message if the delete request fails
+            console.error('Failed to delete income item');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting income item:', error);
+        });
+    } else {
+      // If the income item doesn't have an 'id', just remove it from the local state
+      const updatedIncome = [...financialData.income];
+      updatedIncome.splice(index, 1);
+      setFinancialData({ ...financialData, income: updatedIncome });
+    }
   };
 
   return (
@@ -28,7 +58,7 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
         Income:
       </label>
       {financialData.income.map((income, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Income source'
@@ -74,6 +104,8 @@ const FinancialIncome = ({ financialData, setFinancialData, onNext }) => {
 
 
 const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const handleNext = () => {
     // Perform any data validation or processing if needed
     onNext();
@@ -85,10 +117,29 @@ const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) 
   };
 
   const handleRemoveExpense = (index) => {
-    const updatedExpenses = [...financialData.expenses];
-    updatedExpenses.splice(index, 1);
-    setFinancialData({ ...financialData, expenses: updatedExpenses });
+    const deletedExpense = financialData.expenses[index];
+    if (deletedExpense.id) {
+      axiosPrivate
+        .delete(`api/api/expenses/${deletedExpense.id}/`)
+        .then((response) => {
+          if (response.status === 204) {
+            const updatedExpenses = [...financialData.expenses];
+            updatedExpenses.splice(index, 1);
+            setFinancialData({ ...financialData, expenses: updatedExpenses });
+          } else {
+            console.error('Failed to delete expense item');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting expense item:', error);
+        });
+    } else {
+      const updatedExpenses = [...financialData.expenses];
+      updatedExpenses.splice(index, 1);
+      setFinancialData({ ...financialData, expenses: updatedExpenses });
+    }
   };
+  
 
   return (
     <div className='p-4 flex flex-col justify-start gap-4 h-full'>
@@ -96,7 +147,7 @@ const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) 
         Expenses:
       </label>
       {financialData.expenses.map((expense, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Expense category'
@@ -134,6 +185,8 @@ const FinancialExpenses = ({ financialData, setFinancialData, onPrev, onNext }) 
 };
 
 const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const handleNext = () => {
     // Perform any data validation or processing if needed
     onNext();
@@ -145,18 +198,37 @@ const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) =
   };
 
   const handleRemoveSavings = (index) => {
-    const updatedSavings = [...financialData.savings];
-    updatedSavings.splice(index, 1);
-    setFinancialData({ ...financialData, savings: updatedSavings });
+    const deletedSavings = financialData.savings[index];
+  
+    if (deletedSavings.id) {
+      axiosPrivate
+        .delete(`api/api/savings/${deletedSavings.id}/`)
+        .then((response) => {
+          if (response.status === 204) {
+            const updatedSavings = [...financialData.savings];
+            updatedSavings.splice(index, 1);
+            setFinancialData({ ...financialData, savings: updatedSavings });
+          } else {
+            console.error('Failed to delete savings item');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting savings item:', error);
+        });
+    } else {
+      const updatedSavings = [...financialData.savings];
+      updatedSavings.splice(index, 1);
+      setFinancialData({ ...financialData, savings: updatedSavings });
+    }
   };
-
+  
   return (
     <div className='p-4 flex flex-col justify-start gap-4'>
       <label htmlFor="savings" className="dark:text-white self-start font-semibold text-md">
         Savings:
       </label>
       {financialData.savings.map((savings, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Savings type'
@@ -195,17 +267,23 @@ const FinancialSavings = ({ financialData, setFinancialData, onPrev, onNext }) =
 
 
 const FinancialRecommendations = ({ financialData, onPrev, onNext }) => {
-  const [recommendations, setRecommendations] = useState("");
+  const { recommendations, updateRecommendations, clearRecommendations } = useFinancialRecommendations();
+  // const [recommendations, setRecommendations] = useState("");
   const apiKey = import.meta.env.VITE_OPENAI_API_KEY; // Your OpenAI API key
   const userCountry = "Kenya"; // TODO: Get my country from the user profile
-
-
+  const [isLoading, setIsLoading] = useState(false);
+  const {auth} = useAuth();
+  const uid = auth.user_id;
+  const reccommendationsPost = usePost("api/api/reccommendations/")
     const generateRecommendations = async () => {
       try {
+        setIsLoading(true);
         const response = await fetchRecommendations(apiKey, financialData);
 
         // Set the generated recommendations in the state
-        setRecommendations(response);
+        updateRecommendations(response);
+        reccommendationsPost({user: uid, html_content: response})
+        setIsLoading(false);
       } catch (error) {
         console.error("Error generating recommendations: ", error);
       }
@@ -346,15 +424,24 @@ const handleSubmit = () => {
 
   return (
     <div className="dark:text-white p-4 rounded-lg mt-4 h-full w-full flex flex-col">
-      <h2 className="text-2xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
-        AI-Generated Financial Recommendations
-      </h2>
-      <div className="text-left mb-4" dangerouslySetInnerHTML={{ __html: recommendations }} />
+      {isLoading ? (<div className="flex flex-col justify-center items-center h-full">
+        <h2 className="text-xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
+          Generating Recommendations for you...This might take a while
+        </h2>
+        <div className="animate-spin dark:text-white dark:border-white rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
+      </div>)
+      :(<div>
+        <h2 className="text-2xl text-slate-600 dark:text-slate-300 font-semibold mb-4">
+          AI-Generated Financial Recommendations
+        </h2>
+        <div className="text-left mb-4" dangerouslySetInnerHTML={{ __html: recommendations }} />
+      </div>)}
       <div className="flex flex-row gap-3 self-end">
        
         <Button
           onClick={handleSubmit}
           label={"Generate"}
+          disabled = {isLoading}
           className="dark:bg-blue-500 dark:hover:bg-blue-600 dark:text-white bg-blue-500 px-5 py-3 self-end rounded-md text-white font-semibold"
         />
          <Button
@@ -373,6 +460,8 @@ export default FinancialRecommendations;
 
 
 const FinancialGoals = ({ financialData, setFinancialData, onPrev, onNext }) => {
+  const axiosPrivate = useAxiosPrivate();
+
   const handleNext = () => {
     // Perform any data validation or processing if needed
     onNext();
@@ -384,18 +473,37 @@ const FinancialGoals = ({ financialData, setFinancialData, onPrev, onNext }) => 
   };
 
   const handleRemoveGoal = (index) => {
-    const updatedGoals = [...financialData.goals];
-    updatedGoals.splice(index, 1);
-    setFinancialData({ ...financialData, goals: updatedGoals });
+    const deletedGoal = financialData.goals[index];
+  
+    if (deletedGoal.id) {
+      axiosPrivate
+        .delete(`api/api/goals/${deletedGoal.id}/`)
+        .then((response) => {
+          if (response.status === 204) {
+            const updatedGoals = [...financialData.goals];
+            updatedGoals.splice(index, 1);
+            setFinancialData({ ...financialData, goals: updatedGoals });
+          } else {
+            console.error('Failed to delete goal item');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting goal item:', error);
+        });
+    } else {
+      const updatedGoals = [...financialData.goals];
+      updatedGoals.splice(index, 1);
+      setFinancialData({ ...financialData, goals: updatedGoals });
+    }
   };
-
+  
   return (
     <div className='p-4 flex flex-col justify-start gap-4'>
       <label htmlFor="goals" className="dark:text-white self-start font-semibold text-md">
         Financial Goals:
       </label>
       {financialData.goals.map((goal, index) => (
-        <div key={index} className="flex gap-4">
+        <div key={index} className="flex flex-col-reverse sm:flex-row border rounded-lg dark:border-slate-400 sm:border-none p-2 sm:p-0 gap-4">
           <InputField
             type="text"
             placeholder='Goal description'

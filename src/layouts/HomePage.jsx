@@ -5,7 +5,7 @@ import { BiLike } from 'react-icons/bi'
 import { CiUser } from 'react-icons/ci'
 import DarkModeSwitcher from '../components/DarkModeSwitch'
 import { Link } from 'react-router-dom'
-import { FaBars, FaBookReader } from 'react-icons/fa'
+import { FaBars, FaBookReader, FaFonticons, FaHistory, FaUserEdit } from 'react-icons/fa'
 import { AiOutlineClose } from 'react-icons/ai'
 import {profile} from '../assets/images'
 import MobileMenu from './MobileMenu'
@@ -15,6 +15,8 @@ import useAuth from '../hooks/useAuth'
 import {IoMdLogOut} from 'react-icons/io'
 import { toast, ToastContainer } from 'react-toastify';
 import { BsCash } from 'react-icons/bs'
+import { FaChartBar } from 'react-icons/fa'
+import { FaBookBookmark, FaMessage } from 'react-icons/fa6'
 
 
 
@@ -34,27 +36,22 @@ const path = location.pathname.slice(1);
 
     const menuItems = [
         {
-            icon: <BiLike />,
-            name: 'recommendations',
+            icon: <FaChartBar />,
+            name: 'plans',
             link: '/recommendations',
         },
         {
-            icon: <BsChat />,
+            icon: <FaMessage />,
             name: 'chat',
             link: '/gptchat',
         },
-        // {
-        //     icon: <BsClockHistory />,
-        //     name: 'history',
-        //     link: '/history',
-        // },
         {
-            icon: <CiUser />,
+            icon: <FaUserEdit />,
             name: 'profile',
             link: '/profile',
         },
         {
-            icon: <BsBook />,
+            icon: <FaBookBookmark />,
             name: 'lessons',
             link: '/lessons',
         },
@@ -73,12 +70,12 @@ const path = location.pathname.slice(1);
         window.location.reload();
       };
   return (
-    <div className="flex border dark:border-slate-600 w-full min-h-screen dark:bg-slate-800 bg-slate-100">
+    <div className="home flex border dark:border-slate-600 w-full min-h-screen h-full dark:bg-slate-800 bg-slate-100">
         <ToastContainer />
         {/* Sidebar */}
-        <div className="hidden md:flex flex-col md:w-48 h-full fixed dark:bg-slate-800 bg-blue-100">
-            <div className="flex items-center border-y dark:border-slate-600">
-                <Link to={'/'} className="text-blue-600 dark:text-blue-400 font-bold justify-center px-5 w-full text-2xl mb-2 flex gap-2 items-center text-center"><BsCash />FININFO</Link>
+        <div className="hidden md:flex flex-col md:w-48 h-screen fixed dark:bg-slate-800 dark:border-r dark:border-slate-600 bg-blue-200">
+            <div className="flex items-center">
+                <Link to={'/'} className="text-blue-600 dark:text-blue-400 font-bold justify-center px-5 w-full text-2xl mb-2 flex gap-2 items-center text-center"><FaFonticons />FININFO</Link>
             </div>
             <div className="flex flex-col gap-2 p-2">
                 {menuItems.map((item, i) => <MenuItem key={i} item={item} activeMenu={activeMenu} setActiveMenu={setActiveMenu} />)}
@@ -107,9 +104,9 @@ const path = location.pathname.slice(1);
             activeMenu={activeMenu} 
         />
         {/* Main Page */}
-        <div className="flex flex-col border dark:border-slate-600 w-full md:ml-48">
+        <div className="flex flex-col  w-full md:ml-48 h-full">
             {/* Header */}
-            <div className="flex items-center justify-end border-b dark:border-slate-600 px-4 py-1 sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 w-full">
+            <div className="flex items-center justify-end  px-4 py-3 sticky top-0 z-10 bg-blue-100 dark:bg-slate-800 dark:border-b dark:border-slate-600 w-full">
                 <div className="flex gap-2 items-center">
                     <DarkModeSwitcher />
                     <span className="hidden md:flex text-slate-600 dark:text-white font-medium">{auth?.username}</span>
