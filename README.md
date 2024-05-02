@@ -14,3 +14,5 @@ The purpose of this repository is to provide a collaborative space for developme
 ## How Generative AI Models are Solving the Problem
 
 FINFO leverages fine-tuned Generative AI models to power the platform's functionality, particularly powering the request and response feature of the chat application. The chosen Generative AI models, such as the `Llama 2` model, have been fine-tuned to process and interpret user requests/prompts and return relevant (finance) information as per the needs of the user.
+
+
